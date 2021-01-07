@@ -9,10 +9,12 @@
 
                                         <h1 class="page-header-title">Welcome to CMS</h1>
                                         <p class="page-header-text mb-5">Are you searching for some content that you haven't found yet? Try searching in the search box below!</p>
-                                        <form class="page-header-signup mb-2 mb-md-0">
+                                        <form class="page-header-signup mb-2 mb-md-0" action="search.php" method="post">
                                             <div class="form-row justify-content-center">
                                                 <div class="col-lg-6 col-md-8">
-                                                    <div class="form-group mr-0 mr-lg-2"><input class="form-control form-control-solid rounded-pill" type="text" placeholder="Search keyword..."/></div>
+                                                    <div class="form-group mr-0 mr-lg-2">
+                                                        <input class="form-control form-control-solid rounded-pill" name="search" type="text" placeholder="Search keyword..."/>
+                                                    </div>
                                                 </div>
                                                 <div class="col-lg-3 col-md-4"><button class="btn btn-teal btn-block btn-marketing rounded-pill" type="submit">Search</button></div>
                                             </div>

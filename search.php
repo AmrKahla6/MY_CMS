@@ -1,12 +1,43 @@
 <?php $page_title = "Search" ?>
 <?php require_once("./inc/header.php"); ?>
+
+
+                    <?php
+                       if(isset($_POST['search']))
+                       {
+                           $keyword = $_POST['search'];
+                           $sql     = "SELECT *
+                                       FROM posts
+                                       WHERE post_status = :status
+                                       AND post_title
+                                       LIKE :title";
+
+                            $stmt    = $pdo->prepare($sql);
+                            $stmt->execute([
+                                ':status' => 'published',
+                                ':title'  => '%'. trim($keyword) .'%'
+                            ]);
+
+                            $post_found = 0;
+                            $count = $stmt->rowCount();
+
+                            if($count == 0)
+                            {
+                                $post_found = 0;
+                            }
+                            else
+                            {
+                                $post_found = $count ;
+                            }
+                       }
+                    ?>
                     <header class="page-header page-header-dark bg-gradient-primary-to-secondary">
                         <div class="page-header-content pt-10">
                             <div class="container text-center">
                                 <div class="row justify-content-center">
                                     <div class="col-lg-8">
-                                        <h1 class="page-header-title mb-3">Search result for %keyword%</h1>
-                                        <p class="page-header-text">Date, category, time</p>
+                                        <h1 class="page-header-title mb-3">Search result for <?php echo $keyword ?></h1>
+                                        <p class="page-header-text">Total posts found : <?php echo $post_found ?> </p>
                                     </div>
                                 </div>
                             </div>
@@ -21,114 +52,71 @@
                             <h1>Search Result:</h1>
                             <hr />
                             <div class="row">
-                                <div class="col-md-6 col-xl-4 mb-5">
-                                    <a class="card post-preview lift h-100" href="#!"
-                                        ><img class="card-img-top" src="./img/screenshots/header-basic.jpg" alt="..." />
-                                        <div class="card-body">
-                                            <h5 class="card-title">Invest In Social Impact</h5>
-                                            <p class="card-text">Expose the truth, problem-solvers impact mobilized green spaces.</p>
-                                        </div>
-                                        <div class="card-footer">
-                                            <div class="post-preview-meta">
-                                                <img class="post-preview-meta-img" src="./img/mdabarik.jpg" />
-                                                <div class="post-preview-meta-details">
-                                                    <div class="post-preview-meta-details-name">Aariz Fischer</div>
-                                                    <div class="post-preview-meta-details-date">Feb 4 &#xB7; 5 min read</div>
+                            <?php
+                                 $keyword = $_POST['search'];
+                                 $sql     = "SELECT *
+                                             FROM posts
+                                             WHERE post_status = :status
+                                             AND post_title
+                                             LIKE :title
+                                             ORDER BY post_id DESC
+                                             LIMIT 0, 6";
+
+                                  $stmt    = $pdo->prepare($sql);
+                                  $stmt->execute([
+                                      ':status' => 'published',
+                                      ':title'  => '%'. trim($keyword) .'%'
+                                  ]);
+                                  $count = $stmt->rowCount();
+
+                                  if($count == 0)
+                                  {
+                                      echo "<div class='container text-center'>";
+                                        echo "<div class='row justify-content-center'>";
+                                            echo "<h1 class='page-header-title mb-3'>No Posts Try Again</h1>";
+                                        echo "</div>";
+                                      echo "</div>";
+                                  }
+                                  else
+                                  {
+                                    while($post = $stmt->fetch(PDO::FETCH_ASSOC))
+                                    {
+                                        $post_id       = $post['post_id']       ;
+                                        $post_title    = $post['post_title']    ;
+                                        $post_detail   = $post['post_detail']   ;
+                                        $post_category = $post['post_category'] ;
+                                        $post_image    = $post['post_image']    ;
+                                        $post_date     = $post['post_date']     ;
+                                        $post_author   = $post['post_author']   ;
+                                        $post_view     = $post['post_views']    ;
+                                        ?>
+
+                                        <div class="col-md-6 col-xl-4 mb-5">
+                                            <a class="card post-preview lift h-100" href="single.php?post_id=<?php echo $post_id; ?>"
+                                                ><img class="card-img-top" src="./img/<?php echo $post_image ?>" alt="<?php echo $post_image ?>" />
+                                                <div class="card-body">
+                                                    <h5 class="card-title"> <?php echo $post_title ?>  </h5>
+                                                    <p class="card-text">   <?php echo substr($post_detail , 0 , 140) ?>  </p>
                                                 </div>
-                                            </div>
-                                        </div></a
-                                    >
-                                </div>
-                                <div class="col-md-6 col-xl-4 mb-5">
-                                    <a class="card post-preview lift h-100" href="#!"
-                                        ><img class="card-img-top" src="https://source.unsplash.com/hGV2TfOh0ns/660x360" alt="..." />
-                                        <div class="card-body">
-                                            <h5 class="card-title">Save the World, Social Entrepreneur</h5>
-                                            <p class="card-text">Contextualize co-creation and do good while building your startup.</p>
-                                        </div>
-                                        <div class="card-footer">
-                                            <div class="post-preview-meta">
-                                                <img class="post-preview-meta-img" src="https://source.unsplash.com/e12wQLAjQi0/100x100" />
-                                                <div class="post-preview-meta-details">
-                                                    <div class="post-preview-meta-details-name">Henry Iman</div>
-                                                    <div class="post-preview-meta-details-date">Feb 3 &#xB7; 7 min read</div>
+                                                <div class="card-footer d-flex align-items-center justify-content-between">
+                                                    <div class="post-preview-meta">
+                                                        <img class="post-preview-meta-img" src="./img/pic.jpg" />
+                                                        <div class="post-preview-meta-details">
+                                                            <div class="post-preview-meta-details-name"><?php echo $post_author ?></div>
+                                                            <div class="post-preview-meta-details-date"><?php echo $post_date ?> </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="post-preview-meta">
+                                                         <?php echo $post_view  ?>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </div></a
-                                    >
-                                </div>
-                                <div class="col-md-6 col-xl-4 mb-5">
-                                    <a class="card post-preview lift h-100" href="#!"
-                                        ><img class="card-img-top" src="https://source.unsplash.com/9l_326FISzk/660x360" alt="..." />
-                                        <div class="card-body">
-                                            <h5 class="card-title">Design Thinking Benefits Corporation Thought Leadership</h5>
-                                            <p class="card-text">Global changemakers, a state of play releives stress and creates inspirational work environments.</p>
+                                            </a>
                                         </div>
-                                        <div class="card-footer">
-                                            <div class="post-preview-meta">
-                                                <img class="post-preview-meta-img" src="https://source.unsplash.com/zEMl5XuLfew/100x100" />
-                                                <div class="post-preview-meta-details">
-                                                    <div class="post-preview-meta-details-name">Mahesh Kumar</div>
-                                                    <div class="post-preview-meta-details-date">Feb 1 &#xB7; 4 min read</div>
-                                                </div>
-                                            </div>
-                                        </div></a
-                                    >
-                                </div>
-                                <div class="col-md-6 col-xl-4 mb-5">
-                                    <a class="card post-preview lift h-100" href="#!"
-                                        ><img class="card-img-top" src="https://source.unsplash.com/oqStl2L5oxI/660x360" alt="..." />
-                                        <div class="card-body">
-                                            <h5 class="card-title">Collaborative Consumption, Human-Centered Technology Thought Leader Systems</h5>
-                                            <p class="card-text">Milestones theory of change, an effective paradigm, exposes the truth and best practices to uplift equal opportunity.</p>
-                                        </div>
-                                        <div class="card-footer">
-                                            <div class="post-preview-meta">
-                                                <img class="post-preview-meta-img" src="https://source.unsplash.com/-FOUPtqP-mY/100x100" />
-                                                <div class="post-preview-meta-details">
-                                                    <div class="post-preview-meta-details-name">Amy Love</div>
-                                                    <div class="post-preview-meta-details-date">Jan 30 &#xB7; 12 min read</div>
-                                                </div>
-                                            </div>
-                                        </div></a
-                                    >
-                                </div>
-                                <div class="col-md-6 col-xl-4 mb-5">
-                                    <a class="card post-preview lift h-100" href="#!"
-                                        ><img class="card-img-top" src="https://source.unsplash.com/Oalh2MojUuk/660x360" alt="..." />
-                                        <div class="card-body">
-                                            <h5 class="card-title">Co-create, Empower - Moving the Needle on Investor Interests</h5>
-                                            <p class="card-text">Scalable efficient systems and thinking as a social entrepreneur creates a transparent, targeted vison.</p>
-                                        </div>
-                                        <div class="card-footer">
-                                            <div class="post-preview-meta">
-                                                <img class="post-preview-meta-img" src="https://source.unsplash.com/QAB-WJcbgJk/100x100" />
-                                                <div class="post-preview-meta-details">
-                                                    <div class="post-preview-meta-details-name">Valerie Luna</div>
-                                                    <div class="post-preview-meta-details-date">Jan 29 &#xB7; 4 min read</div>
-                                                </div>
-                                            </div>
-                                        </div></a
-                                    >
-                                </div>
-                                <div class="col-md-6 col-xl-4 mb-5">
-                                    <a class="card post-preview lift h-100" href="#!"
-                                        ><img class="card-img-top" src="https://source.unsplash.com/-uHVRvDr7pg/660x360" alt="..." />
-                                        <div class="card-body">
-                                            <h5 class="card-title">Inclusive Shared Units of Analysis</h5>
-                                            <p class="card-text">Commit to inspiring social capital, social capital inspires the body and the mind.</p>
-                                        </div>
-                                        <div class="card-footer">
-                                            <div class="post-preview-meta">
-                                                <img class="post-preview-meta-img" src="https://source.unsplash.com/qsjM7zomoEI/100x100" />
-                                                <div class="post-preview-meta-details">
-                                                    <div class="post-preview-meta-details-name">David Walker</div>
-                                                    <div class="post-preview-meta-details-date">Jan 25 &#xB7; 7 min read</div>
-                                                </div>
-                                            </div>
-                                        </div></a
-                                    >
-                                </div>
+
+                                        <?php
+                                    }
+                                  }
+                            ?>
                             </div>
 
                             <nav aria-label="Page navigation example">
