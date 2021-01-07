@@ -99,7 +99,7 @@
                                             <div class="py-5">
                                                 <h5 class="card-title"><?php echo $post_title ?></h5>
                                                 <p class="card-text">
-                                                    <?php echo $post_detail ?>
+                                                    <?php echo substr($post_detail , 0 , 140) ?>
                                                 </p>
                                             </div>
                                             <hr />
@@ -286,25 +286,6 @@
                             </svg>
                         </div>
                         <!--End Waves-->
-
                 </main>
             </div>
-
-            <div id="layoutDefault_footer">
-                <footer class="footer pt-2 pb-4 mt-auto bg-dark footer-dark">
-                    <div class="container">
-                        <hr class="mb-1" />
-                        <div class="row align-items-center">
-                            <div class="col-md-6 small">Copyright &#xA9; TechBarik 2020</div>
-                            <div class="col-md-6 text-md-right small">
-                                <a href="#">Privacy Policy</a>
-                                &#xB7;
-                                <a href="#">Terms &amp; Conditions</a>
-                            </div>
-                        </div>
-                    </div>
-                </footer>
-            </div>
-        </div>
-
 <?php require_once("./inc/footer.php"); ?>

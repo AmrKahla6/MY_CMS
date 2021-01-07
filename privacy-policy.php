@@ -30,8 +30,7 @@
                             <div class="container text-center">
                                 <div class="row justify-content-center">
                                     <div class="col-lg-8">
-                                        <h1 class="page-header-title mb-3">Post Title</h1>
-                                        <p class="page-header-text">Date, category, time</p>
+                                        <h1 class="page-header-title mb-3">Privacy Policy</h1>
                                     </div>
                                 </div>
                             </div>
@@ -43,7 +42,7 @@
                     <section class="bg-white py-10">
                         <div class="container">
                             <div>
-                                <h1>This is a basic content page.</h1>
+                                <h1>Our Privacy Policy:</h1>
                                 <p class="lead">You can use this page as a starting point to create your own custom pages, or choose an already built example page to start development!</p>
                                 <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Qui quisquam animi temporibus ipsum iusto necessitatibus laudantium beatae. Eligendi dolorum laudantium numquam? Officiis nemo error animi aliquam dolor consequatur ducimus unde.</p>
                                 <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui repellat magni eaque beatae explicabo fugit placeat earum, dolores quaerat aperiam vero adipisci quidem minus officiis blanditiis unde? Incidunt, ea ad.</p>
@@ -58,4 +57,6 @@
                     </section>
                 </main>
             </div>
+
+
 <?php require_once("./inc/footer.php"); ?>
