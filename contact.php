@@ -1,3 +1,4 @@
+<?php $page_title = "Contact us" ?>
 <?php require_once("./inc/header.php"); ?>
 
                     <header class="page-header page-header-dark bg-gradient-primary-to-secondary">

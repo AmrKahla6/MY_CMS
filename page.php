@@ -1,5 +1,5 @@
+<?php $page_title = "About us" ?>
 <?php require_once("./inc/header.php"); ?>
-
                     <header class="page-header page-header-dark bg-gradient-primary-to-secondary">
                         <div class="page-header-content pt-10">
                             <div class="container text-center">

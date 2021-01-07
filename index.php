@@ -1,3 +1,4 @@
+<?php $page_title = "Homepage" ?>
 <?php require_once("./inc/header.php"); ?>
 
                     <header class="page-header page-header-dark bg-secondary">

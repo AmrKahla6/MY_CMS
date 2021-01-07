@@ -1,3 +1,4 @@
+<?php $page_title = "Categories" ?>
 <?php require_once("./inc/header.php"); ?>
                     <header class="page-header page-header-dark bg-secondary">
                         <div class="page-header-content">
