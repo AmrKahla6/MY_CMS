@@ -81,7 +81,7 @@
                                             </div>
                                             <hr />
                                             <div class="post-preview-meta">
-                                                <img class="post-preview-meta-img" src="./img/mdabarik.jpg" />
+                                                <img class="post-preview-meta-img" src="./img/pic.jpg" />
                                                 <div class="post-preview-meta-details">
                                                     <div class="post-preview-meta-details-name"><?php echo $post_author ?></div>
                                                     <div class="post-preview-meta-details-date"><?php echo $post_date ?></div>
@@ -97,7 +97,7 @@
                             <div class="row">
                             <?php
 
-                                    $sql  = "SELECT * FROM posts WHERE post_status = :status";
+                                    $sql  = "SELECT * FROM posts WHERE post_status = :status ORDER BY post_id DESC LIMIT 0 , 6";
                                     $stmt = $pdo->prepare($sql);
                                     $stmt->execute([
                                         ":status" => "published"
@@ -124,7 +124,7 @@
                                                 </div>
                                                 <div class="card-footer d-flex align-items-center justify-content-between">
                                                     <div class="post-preview-meta">
-                                                        <img class="post-preview-meta-img" src="./img/mdabarik.jpg" />
+                                                        <img class="post-preview-meta-img" src="./img/pic.jpg" />
                                                         <div class="post-preview-meta-details">
                                                             <div class="post-preview-meta-details-name"><?php echo $post_author ?></div>
                                                             <div class="post-preview-meta-details-date"><?php echo $post_date ?> </div>
@@ -186,7 +186,7 @@
                                                 </div>
                                                 <div class="card-footer d-flex align-items-center justify-content-between">
                                                     <div class="post-preview-meta">
-                                                        <img class="post-preview-meta-img" src="./img/mdabarik.jpg" />
+                                                        <img class="post-preview-meta-img" src="./img/pic.jpg" />
                                                         <div class="post-preview-meta-details">
                                                             <div class="post-preview-meta-details-name"><?php echo $post_author ?></div>
                                                             <div class="post-preview-meta-details-date"> Posted on : <?php echo $post_date ?> </div>
