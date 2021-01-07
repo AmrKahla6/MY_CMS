@@ -7,7 +7,7 @@
                             <div class="col-md-6 text-md-right small">
                                 <a href="privacy-policy.php">Privacy Policy</a>
                                 &#xB7;
-                                <a href="#">Terms &amp; Conditions</a>
+                                <a href="terms-conditions.php">Terms &amp; Conditions</a>
                             </div>
                         </div>
                     </div>
