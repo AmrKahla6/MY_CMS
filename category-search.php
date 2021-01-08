@@ -1,21 +1,23 @@
 <?php $page_title = "Search" ?>
 <?php require_once("./inc/header.php"); ?>
 
-
                     <?php
                        if(isset($_POST['search']))
                        {
                            $keyword = $_POST['search'];
+                           $cat_id  = $_POST['category_id'];
                            $sql     = "SELECT *
                                        FROM posts
                                        WHERE post_status = :status
                                        AND post_title
-                                       LIKE :title";
+                                       LIKE :title
+                                       AND post_category_id = :id";
 
                             $stmt    = $pdo->prepare($sql);
                             $stmt->execute([
                                 ':status' => 'published',
-                                ':title'  => '%'. trim($keyword) .'%'
+                                ':title'  => '%'. trim($keyword) .'%',
+                                ':id'     => $cat_id,
                             ]);
 
                             $post_found = 0;

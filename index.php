@@ -164,9 +164,11 @@
                             <hr />
                             <div class="row">
                                 <?php
-                                    $sql2 = "SELECT * FROM posts ORDER BY post_views DESC LIMIT 0 , 3";
+                                    $sql2 = "SELECT * FROM posts WHERE post_status = :status ORDER BY post_views DESC LIMIT 0 , 3";
                                     $stmt = $pdo->prepare($sql2);
-                                    $stmt->execute();
+                                    $stmt->execute([
+                                        ':status' => "published",
+                                    ]);
                                     while($posts = $stmt->fetch(PDO::FETCH_ASSOC))
                                     {
                                         $post_id       = $posts['post_id']       ;
@@ -191,7 +193,7 @@
                                                         <img class="post-preview-meta-img" src="./img/pic.jpg" />
                                                         <div class="post-preview-meta-details">
                                                             <div class="post-preview-meta-details-name"><?php echo $post_author ?></div>
-                                                            <div class="post-preview-meta-details-date"> Posted on : <?php echo $post_date ?> </div>
+                                                            <div class="post-preview-meta-details-date"><?php echo $post_date ?> </div>
                                                         </div>
                                                     </div>
                                                     <div class="post-preview-meta">
