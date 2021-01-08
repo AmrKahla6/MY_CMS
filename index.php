@@ -63,7 +63,7 @@
                             $post_id       = $post['post_id']       ;
                             $post_title    = $post['post_title']    ;
                             $post_detail   = $post['post_detail']   ;
-                            $post_category = $post['post_category'] ;
+                            $post_category = $post['post_category_id'] ;
                             $post_image    = $post['post_image']    ;
                             $post_date     = $post['post_date']     ;
                             $post_author   = $post['post_author']   ;
@@ -110,7 +110,7 @@
                                         $post_id       = $posts['post_id']       ;
                                         $post_title    = $posts['post_title']    ;
                                         $post_detail   = $posts['post_detail']   ;
-                                        $post_category = $posts['post_category'] ;
+                                        $post_category = $posts['post_category_id'] ;
                                         $post_image    = $posts['post_image']    ;
                                         $post_date     = $posts['post_date']     ;
                                         $post_author   = $posts['post_author']   ;
@@ -172,7 +172,7 @@
                                         $post_id       = $posts['post_id']       ;
                                         $post_title    = $posts['post_title']    ;
                                         $post_detail   = $posts['post_detail']   ;
-                                        $post_category = $posts['post_category'] ;
+                                        $post_category = $posts['post_category_id'] ;
                                         $post_image    = $posts['post_image']    ;
                                         $post_date     = $posts['post_date']     ;
                                         $post_author   = $posts['post_author']   ;
@@ -218,13 +218,14 @@
 
                                 while($categories = $stmt->fetch(PDO::FETCH_ASSOC))
                                 {
+                                    $catgeory_id    = $categories['category_id'];
                                     $catgeory_name  = $categories['category_name'];
                                     $total_posts    = $categories['category_total_posts'];
                                     $post_views     = $categories['total_post_views'];
                                     ?>
 
                                     <div class="col-lg-4 col-md-6 mb-5">
-                                        <a class="card card-link border-top border-top-lg border-primary h-100 lift" href="#!"
+                                        <a class="card card-link border-top border-top-lg border-primary h-100 lift" href="categories.php?category_id=<?php echo $catgeory_id; ?>&category_name=<?php echo $catgeory_name?>"
                                             ><div class="card-body p-5">
                                                 <div class="icon-stack icon-stack-lg bg-primary-soft text-primary mb-4"><i data-feather="user"></i></div>
                                                 <h6><?php echo $catgeory_name ?></h6>
