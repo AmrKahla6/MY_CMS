@@ -18,7 +18,7 @@
                 <?php
                     if(isset($_POST['submit']))
                     {
-                        $errors =array();
+                        $errors = array();
                         $first_name = trim($_POST['first-name']);
                         $last_name  = trim($_POST['last-name']);
                         $full_name  = $first_name .' '. $last_name;
@@ -27,25 +27,37 @@
                         $password   = trim($_POST['password']);
                         $conf_pass  = trim($_POST['confirm-password']);
 
+                        //Check email exist or not
                         $sql1  = "SELECT * FROM users WHERE user_email = :email";
                         $stmt1 = $pdo->prepare($sql1);
                         $stmt1->execute([
                             ':email' => $email
                         ]);
-
-                        //Check email exist or not
                         $count_email = $stmt1->rowCount();
                         if($count_email != 0)
                         {
-                            $errors = "Email already exist!";
+                            $errors[] = "Email already exist!";
                         }
 
+                        //Mathch Password
                         if($password != $conf_pass)
                         {
-                            $errors = "Password doesn't match";
+                            $errors[] = "Password doesn't match";
                         }
-                        else
-                        {
+
+                         //Check username exist or not
+                         $sql2  = "SELECT * FROM users WHERE user_nickname = :user";
+                         $stmt2 = $pdo->prepare($sql2);
+                         $stmt2->execute([
+                             ':user' => $username
+                         ]);
+                         $count_users = $stmt2->rowCount();
+                         if($count_users != 0)
+                         {
+                             $errors[] = "Username already exist!";
+                         }
+                    else
+                    {
                             $hash = password_hash($password, PASSWORD_BCRYPT, ['cost' => 10]);
                             $sql = "INSERT INTO users (user_name , user_nickname, user_email, user_password, user_photo, registered_on)
                                     VALUE (:name, :username, :email, :password, :photo, :data)";
@@ -73,13 +85,13 @@
                                     <div class="card-body">
                                         <form action="signup.php" method="post">
                                             <?php
-
-                                            foreach($errors as $error):
-                                                if(isset($error))
+                                                if(count($errors) > 0)
                                                 {
-                                                    echo "<div class='alert alert-danger text-center'>{$error}</div><hr>";
+                                                    foreach($errors as $error):
+                                                        echo "<div class='alert alert-danger text-center'>{$error}</div><br>";
+                                                    endforeach;
                                                 }
-                                            endforeach;
+
                                              if(isset($success))
                                                 {
                                                     echo "<div class='alert alert-success text-center'>Account created successfuly. <a href='signin.php'> Sign in now </a></div><hr>";
