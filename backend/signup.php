@@ -18,6 +18,7 @@
                 <?php
                     if(isset($_POST['submit']))
                     {
+                        $errors =array();
                         $first_name = trim($_POST['first-name']);
                         $last_name  = trim($_POST['last-name']);
                         $full_name  = $first_name .' '. $last_name;
@@ -26,13 +27,26 @@
                         $password   = trim($_POST['password']);
                         $conf_pass  = trim($_POST['confirm-password']);
 
+                        $sql1  = "SELECT * FROM users WHERE user_email = :email";
+                        $stmt1 = $pdo->prepare($sql1);
+                        $stmt1->execute([
+                            ':email' => $email
+                        ]);
+
+                        //Check email exist or not
+                        $count_email = $stmt1->rowCount();
+                        if($count_email != 0)
+                        {
+                            $errors = "Email already exist!";
+                        }
+
                         if($password != $conf_pass)
                         {
-                            $error = "Password doesn't match";
+                            $errors = "Password doesn't match";
                         }
                         else
                         {
-                            // $hash = password_hash($password, PASSWORD_BCRYPT, ['cost' => 10]);
+                            $hash = password_hash($password, PASSWORD_BCRYPT, ['cost' => 10]);
                             $sql = "INSERT INTO users (user_name , user_nickname, user_email, user_password, user_photo, registered_on)
                                     VALUE (:name, :username, :email, :password, :photo, :data)";
 
@@ -42,7 +56,7 @@
                                 ':name'     => $full_name,
                                 ':username' => $username,
                                 ':email'    => $email,
-                                ':password' => $password,
+                                ':password' => $hash,
                                 ':photo'    => 'default.png',
                                 ':data'     => date("M n, Y") . ' at ' . date("h:i A")
                             ]);
@@ -59,11 +73,14 @@
                                     <div class="card-body">
                                         <form action="signup.php" method="post">
                                             <?php
+
+                                            foreach($errors as $error):
                                                 if(isset($error))
                                                 {
                                                     echo "<div class='alert alert-danger text-center'>{$error}</div><hr>";
                                                 }
-                                                else if(isset($success))
+                                            endforeach;
+                                             if(isset($success))
                                                 {
                                                     echo "<div class='alert alert-success text-center'>Account created successfuly. <a href='signin.php'> Sign in now </a></div><hr>";
                                                 }
