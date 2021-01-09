@@ -21,6 +21,7 @@
                         $first_name = trim($_POST['first-name']);
                         $last_name  = trim($_POST['last-name']);
                         $full_name  = $first_name .' '. $last_name;
+                        $username   = trim($_POST['username']);
                         $email      = trim($_POST['email']);
                         $password   = trim($_POST['password']);
                         $conf_pass  = trim($_POST['confirm-password']);
@@ -31,17 +32,22 @@
                         }
                         else
                         {
-                            $sql = "INSERT INTO users (user_name , user_email, user_password, user_photo, registered_on)
-                                    VALUE (:name, :email, :password, :photo, :data)";
+                            // $hash = password_hash($password, PASSWORD_BCRYPT, ['cost' => 10]);
+                            $sql = "INSERT INTO users (user_name , user_nickname, user_email, user_password, user_photo, registered_on)
+                                    VALUE (:name, :username, :email, :password, :photo, :data)";
+
 
                             $stmt = $pdo->prepare($sql);
                             $stmt->execute([
                                 ':name'     => $full_name,
+                                ':username' => $username,
                                 ':email'    => $email,
                                 ':password' => $password,
-                                ':photo'   => 'default.png',
-                                ':data'     => "9 Jun 2021"
+                                ':photo'    => 'default.png',
+                                ':data'     => date("M n, Y") . ' at ' . date("h:i A")
                             ]);
+                            // var_dump($hash);
+                            $success = true;
                         }
                     }
                 ?>
@@ -57,6 +63,10 @@
                                                 {
                                                     echo "<div class='alert alert-danger text-center'>{$error}</div><hr>";
                                                 }
+                                                else if(isset($success))
+                                                {
+                                                    echo "<div class='alert alert-success text-center'>Account created successfuly. <a href='signin.php'> Sign in now </a></div><hr>";
+                                                }
                                             ?>
                                             <div class="form-row">
                                                 <div class="col-md-6">
@@ -70,6 +80,11 @@
                                                     </div>
                                                 </div>
                                             </div>
+
+                                            <div class="form-group"><label class="small mb-1" for="inputNickname">Username</label>
+                                                <input name="username"  required class="form-control py-4" id="inputEmailAddress" type="text" placeholder="Enter user name" />
+                                            </div>
+
                                             <div class="form-group"><label class="small mb-1" for="inputEmailAddress">Email</label>
                                                 <input name="email"  required class="form-control py-4" id="inputEmailAddress" type="email" aria-describedby="emailHelp" placeholder="Enter email address" />
                                             </div>
