@@ -1,3 +1,5 @@
+<?php session_start(); ?>
+<?php ob_start(); ?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -10,6 +12,16 @@
         <script data-search-pseudo-elements defer src="js/all.min.js"></script>
         <script src="js/feather.min.js"></script>
     </head>
+
+
+        <?php
+           if(isset($_SESSION['login']) && $_SESSION['user_role'] == 'admin'){
+
+           }else{
+               header("Location: ../index.php");
+           }
+        ?>
+
     <body class="nav-fixed">
         <nav class="topnav navbar navbar-expand shadow navbar-light bg-white" id="sidenavAccordion">
             <a class="navbar-brand d-none d-sm-block" href="index.html">Admin Panel</a><button class="btn btn-icon btn-transparent-dark order-1 order-lg-0 mr-lg-2" id="sidebarToggle" href="#"><i data-feather="menu"></i></button>
