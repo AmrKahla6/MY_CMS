@@ -47,7 +47,21 @@
                                         $user_role  = $user['user_role'];
 
                                         if(password_verify($pass, $hash_pass)){
-                                            $sucess                = "Sign in successful!";
+                                            $sucess = "Sign in successful!";
+                                            if(!empty($_POST['check']))
+                                            {
+                                                //Save Cookies
+                                                $user_id       = $user['user_id'];
+                                                $user_nickname = $user['user_nickname'];
+
+                                                $d_user_id       = base64_encode($user_id);
+                                                $d_user_nickname = base64_encode($user_nickname);
+
+                                                //user id set cookie
+                                                setcookie('_uid_', $d_user_id, time() + 60 * 60 * 24, '', '', '', true);
+                                                //user nickname set cookie
+                                                setcookie('_uiid_', $d_user_nickname, time() + 60 * 60 * 24, '', '', '', true);
+                                            }
                                             $_SESSION['user_name'] = $user_name;
                                             $_SESSION['user_role'] = $user_role;
                                             $_SESSION['login']     = "success";
