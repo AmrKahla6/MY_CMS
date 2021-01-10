@@ -1,3 +1,5 @@
+<?php require_once("../inc/db.php"); ?>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -17,16 +19,72 @@
                     <div class="container">
                         <div class="row justify-content-center">
                             <div class="col-lg-5">
+                            <?php
+                                if(isset($_POST['submit']))
+                                {
+                                    $errors = array();
+                                    $email = trim($_POST['email']);
+                                    $pass  = trim($_POST['password']);
+
+                                    $sql  = "SELECT * FROM users WHERE user_email = :email";
+                                    $stmt = $pdo->prepare($sql);
+                                    $stmt->execute([
+                                        ':email' => $email,
+                                    ]);
+                                    $count = $stmt->rowCount();
+
+                                    if($count == 0)
+                                    {
+                                        $errors[] = "Email does not exist";
+                                    }elseif($count > 1){
+                                        $errors[] = "ERROR CREDINTIALS";
+                                    }elseif($count == 1){
+
+                                        $user      = $stmt->fetch(PDO::FETCH_ASSOC);
+                                        $hash_pass = $user['user_password'];
+
+                                        if(password_verify($pass, $hash_pass)){
+                                            $sucess = "Sign in successful!";
+                                        }else{
+                                            $errors[] = "Your password is invalid. Please try again.";
+                                        }
+                                    }
+                                }
+
+                            ?>
                                 <div class="card shadow-lg border-0 rounded-lg mt-5">
                                     <div class="card-header justify-content-center"><h3 class="font-weight-light my-4">SIGN IN</h3></div>
                                     <div class="card-body">
-                                        <form>
-                                            <div class="form-group"><label class="small mb-1" for="inputEmailAddress">Email</label><input class="form-control py-4" id="inputEmailAddress" type="email" placeholder="Enter email address" /></div>
-                                            <div class="form-group"><label class="small mb-1" for="inputPassword">Password</label><input class="form-control py-4" id="inputPassword" type="password" placeholder="Enter password" /></div>
+                                        <form action="signin.php" method="post">
+                                        <?php
+                                            if(isset($errors)) {
+                                                foreach($errors as $error):
+                                                    echo "<div class='alert alert-danger text-center'>{$error}</div><br>";
+                                                endforeach;
+                                            }if(isset($sucess)) {
+                                                echo "<div class='alert alert-success text-center'>
+                                                        {$sucess}
+                                                      </div>";
+                                            }
+                                        ?>
                                             <div class="form-group">
-                                                <div class="custom-control custom-checkbox"><input class="custom-control-input" id="rememberPasswordCheck" type="checkbox" /><label class="custom-control-label" for="rememberPasswordCheck">Remember password</label></div>
+                                                <label class="small mb-1" for="inputEmailAddress">Email</label>
+                                                <input name="email" value="<?php echo isset($_POST['email'])?$_POST['email']:'' ?>" class="form-control py-4" id="inputEmailAddress" type="email" placeholder="Enter email address" required/>
                                             </div>
-                                            <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0"><a class="small" href="#"></a><a class="btn btn-primary btn-block" href="index.html">SIGN IN</a></div>
+                                            <div class="form-group">
+                                                <label class="small mb-1" for="inputPassword">Password</label>
+                                                <input name="password" value="<?php echo isset($_POST['password'])?$_POST['password']:'' ?>" class="form-control py-4" id="inputPassword" type="password" placeholder="Enter password" required/>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="custom-control custom-checkbox">
+                                                    <input name="check" class="custom-control-input" id="rememberPasswordCheck" type="checkbox" />
+                                                    <label class="custom-control-label" for="rememberPasswordCheck">Remember password</label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0">
+                                                <a class="small" href="#"></a>
+                                                <button name="submit" class="btn btn-primary btn-block" href="index.html">SIGN IN</button>
+                                            </div>
                                         </form>
                                     </div>
                                     <div class="card-footer text-center">
