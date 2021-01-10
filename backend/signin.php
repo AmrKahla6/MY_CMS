@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <?php require_once("../inc/db.php"); ?>
 
 <!DOCTYPE html>
@@ -40,11 +41,18 @@
                                         $errors[] = "ERROR CREDINTIALS";
                                     }elseif($count == 1){
 
-                                        $user      = $stmt->fetch(PDO::FETCH_ASSOC);
-                                        $hash_pass = $user['user_password'];
+                                        $user       = $stmt->fetch(PDO::FETCH_ASSOC);
+                                        $hash_pass  = $user['user_password'];
+                                        $user_name  = $user['user_name'];
+                                        $user_role  = $user['user_role'];
 
                                         if(password_verify($pass, $hash_pass)){
-                                            $sucess = "Sign in successful!";
+                                            $sucess                = "Sign in successful!";
+                                            $_SESSION['user_name'] = $user_name;
+                                            $_SESSION['user_role'] = $user_role;
+                                            $_SESSION['login']     = "success";
+
+                                            header("Refresh:2;url=../index.php");
                                         }else{
                                             $errors[] = "Your password is invalid. Please try again.";
                                         }
@@ -88,7 +96,7 @@
                                         </form>
                                     </div>
                                     <div class="card-footer text-center">
-                                        <div class="small"><a href="signup.html">Need an account? Sign up!</a></div>
+                                        <div class="small"><a href="signup.php">Need an account? Sign up!</a></div>
                                     </div>
                                 </div>
                             </div>

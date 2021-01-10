@@ -1,6 +1,6 @@
-<?php
-   require_once("./inc/db.php");
-?>
+
+<?php ob_start() ?>
+<?php require_once("./inc/db.php"); ?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -35,8 +35,17 @@
                                         <a class="nav-link" href="about.php">About</a>
                                     </li>
                                 </ul>
-                                <a class="btn-teal btn rounded-pill px-4 ml-lg-4" href="backend/signin.php">Sign in<i class="fas fa-arrow-right ml-1"></i></a>
-                                <a class="btn-teal btn rounded-pill px-4 ml-lg-4" href="backend/signup.php">Sign up<i class="fas fa-arrow-right ml-1"></i></a>
+                                <?php
+                                    if(isset($_SESSION['login'])){?>
+                                        <form action="index.php">
+                                            <button class="btn-teal btn rounded-pill px-4 ml-lg-4" >Sign Out (<?php echo $_SESSION['user_name'] ?>)<i class="fas fa-arrow-right ml-1"></i></button>
+                                        </form>
+                                    <?php } else{?>
+                                            <a class="btn-teal btn rounded-pill px-4 ml-lg-4" href="backend/signin.php">Sign in<i class="fas fa-arrow-right ml-1"></i></a>
+                                            <a class="btn-teal btn rounded-pill px-4 ml-lg-4" href="backend/signup.php">Sign up<i class="fas fa-arrow-right ml-1"></i></a>
+                                    <?php }
+                                ?>
+
                             </div>
                         </div>
                     </nav>
