@@ -50,11 +50,15 @@
                             }
 
                             //Password
+                            $reg="/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/";
                             $password         = trim($_POST['password']);
                             $confirm_password = trim($_POST['confirm-password']);
 
                             if($password != $confirm_password) {
                                 $errors[] = "Password doesn't match";
+                            }else if(!preg_match($reg,$password))
+                            {
+                                $errors[] = "This password is weak , Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character";
                             } else {
                                 $hash = password_hash($password, PASSWORD_BCRYPT, ['cost'=>10]);
                                 $sql = "INSERT INTO users (user_name, user_nickname, user_email, user_password, user_photo, registered_on) VALUES (:name, :nickname, :email, :password, :photo, :date)";
@@ -96,21 +100,25 @@
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label class="small mb-1" for="inputFirstName">First Name</label>
-                                                        <input name="first-name" class="form-control py-4" id="inputFirstName" type="text" placeholder="Enter first name" required="true" />
+                                                        <input name="first-name" class="form-control py-4" id="inputFirstName" type="text" placeholder="Enter first name"
+                                                               value="<?php echo isset($_POST['first-name'])?$_POST['first-name']:'' ?>" required="true" />
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label class="small mb-1" for="inputLastName">Last Name</label>
-                                                        <input name="last-name" class="form-control py-4" id="inputLastName" type="text" placeholder="Enter last name" required="true" />
+                                                        <input name="last-name" class="form-control py-4" id="inputLastName" type="text" placeholder="Enter last name"
+                                                               value="<?php echo isset($_POST['last-name'])?$_POST['last-name']:'' ?>" required="true" />
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="form-group"><label class="small mb-1" for="userNickname">Nick Name</label>
-                                                <input name="nick-name" class="form-control py-4" id="userNickname" type="text" placeholder="Enter nick name" required="true" />
+                                                <input name="nick-name" class="form-control py-4" id="userNickname" type="text" placeholder="Enter nick name"
+                                                       value="<?php echo isset($_POST['nick-name'])?$_POST['nick-name']:'' ?>"  required="true" />
                                             </div>
                                             <div class="form-group"><label class="small mb-1" for="inputEmailAddress">Email</label>
-                                                <input name="email-address" class="form-control py-4" id="inputEmailAddress" type="email" aria-describedby="emailHelp" placeholder="Enter email address" required="true" />
+                                                <input name="email-address" class="form-control py-4" id="inputEmailAddress" type="email" aria-describedby="emailHelp" placeholder="Enter email address"
+                                                       value="<?php echo isset($_POST['email-address'])?$_POST['email-address']:'' ?>" required="true" />
                                             </div>
                                             <div class="form-row">
                                                 <div class="col-md-6">
