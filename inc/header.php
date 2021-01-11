@@ -56,7 +56,7 @@
                                          $user      = $stmt->fetch(PDO::FETCH_ASSOC);
                                          $user_name = $user['user_nickname'];
                                         echo '<form action="logout.php">
-                                                <button class="btn-teal btn rounded-pill px-4 ml-lg-4" >Sign Out (<?php echo $user_name ?>)<i class="fas fa-arrow-right ml-1"></i></button>
+                                                <button class="btn-teal btn rounded-pill px-4 ml-lg-4" >Sign Out <?php echo $user_name ?><i class="fas fa-arrow-right ml-1"></i></button>
                                              </form>';
                                      }
                                     }

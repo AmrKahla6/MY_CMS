@@ -58,9 +58,9 @@
                                                 $d_user_nickname = base64_encode($user_nickname);
 
                                                 //user id set cookie
-                                                setcookie('_uid_', $d_user_id, time() + 60 * 60 * 24, '', '', '', true);
+                                                setcookie('_uid_', $d_user_id, time() + 60 * 60 * 24, '/', '', '', true);
                                                 //user nickname set cookie
-                                                setcookie('_uiid_', $d_user_nickname, time() + 60 * 60 * 24, '', '', '', true);
+                                                setcookie('_uiid_', $d_user_nickname, time() + 60 * 60 * 24, '/', '', '', true);
                                             }
                                             $_SESSION['user_name'] = $user_name;
                                             $_SESSION['user_role'] = $user_role;
