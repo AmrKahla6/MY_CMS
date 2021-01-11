@@ -20,7 +20,6 @@
                                                 <div class="col-lg-3 col-md-4"><button class="btn btn-teal btn-block btn-marketing rounded-pill" type="submit">Search</button></div>
                                             </div>
                                         </form>
-
                                     </div>
                                 </div>
                             </div>

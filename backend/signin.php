@@ -1,6 +1,15 @@
 <?php session_start(); ?>
 <?php require_once("../inc/db.php"); ?>
 
+<?php
+
+    if(isset($_SESSION['login']) || isset($_COOKIE['_uid_']) || isset($_COOKIE['_uiid_']))
+    {
+        header("Location: ../index.php");
+    }
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -95,7 +104,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <label class="small mb-1" for="inputPassword">Password</label>
-                                                <input name="password" value="<?php echo isset($_POST['password'])?$_POST['password']:'' ?>" class="form-control py-4" id="inputPassword" type="password" placeholder="Enter password" required/>
+                                                <input name="password" class="form-control py-4" id="inputPassword" type="password" placeholder="Enter password" required/>
                                             </div>
                                             <div class="form-group">
                                                 <div class="custom-control custom-checkbox">
@@ -110,8 +119,14 @@
                                         </form>
                                     </div>
                                     <div class="card-footer text-center">
-                                        <div class="small"><a href="signup.php">Need an account? Sign up!</a></div>
+                                        <div class="small">
+                                            <a href="signup.php">Need an account? Sign up!</a>
+                                        </div>
+                                        <div class="small">
+                                            <a href="forgot-password.php">Forgot password</a>
+                                        </div>
                                     </div>
+
                                 </div>
                             </div>
                         </div>

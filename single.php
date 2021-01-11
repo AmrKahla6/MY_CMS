@@ -19,10 +19,19 @@
                            {
                                header("Location: index.php");
                            }
-                           $post_title    = $post['post_title']    ;
-                           $post_detail   = $post['post_detail']   ;
-                           $post_category = $post['post_category'] ;
-                           $post_author   = $post['post_author']   ;
+                           $post_title       = $post['post_title']    ;
+                           $post_detail      = $post['post_detail']   ;
+                           $post_category_id = $post['post_category_id'] ;
+                           $post_author      = $post['post_author']   ;
+
+                           $sql = "SELECT * FROM categories WHERE category_id = :id";
+                           $stmt = $pdo->prepare($sql);
+                           $stmt->execute([
+                            ':id' => $post_category_id,
+                            ]);
+
+                            $category = $stmt->fetch(PDO::FETCH_ASSOC);
+                            $post_category = $category['category_name'];
 
                            $sql1 = "UPDATE posts SET post_views = post_views + 1 WHERE post_id = :id";
                            $stmt = $pdo->prepare($sql1);

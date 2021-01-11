@@ -1,5 +1,13 @@
+<?php session_start(); ?>
 <?php require_once("../inc/db.php"); ?>
+<?php
 
+    if(isset($_SESSION['login']) || isset($_COOKIE['_uid_']) || isset($_COOKIE['_uiid_']))
+    {
+        header("Location: ../index.php");
+    }
+
+?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
