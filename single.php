@@ -105,10 +105,19 @@
                                                     $sql     = "INSERT INTO comments (com_post_id, com_detail, com_user_id, com_user_name, com_date, com_status)
                                                                 VALUE (:post_id, :com_detail, :user_id, :user_name, :com_date, :com_status)";
                                                     $stmt    = $pdo->prepare($sql);
+
+                                                    $sql2    = "SELECT * FROM users WHERE user_name = :username";
+                                                    $stmt2   = $pdo->prepare($sql2);
+                                                    $stmt2->execute([
+                                                        ':username' => $_SESSION['user_name'],
+                                                    ]);
+                                                    $result  = $stmt2->fetch(PDO::FETCH_ASSOC);
+                                                    $user_id = $result['user_id'];
+
                                                     $stmt->execute([
                                                         ':post_id'      => $_GET['post_id'],
                                                         ':com_detail'   => $comment,
-                                                        ':user_id'      => base64_decode($_COOKIE['_uid_']),
+                                                        ':user_id'      => $user_id,
                                                         ':user_name'    => $_SESSION['user_name'],
                                                         ':com_date'     => date("M n, Y") . ' at ' . date("h:i A"),
                                                         ':com_status'   => 'unapproved'
