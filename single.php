@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <?php $page_title = "Post details" ?>
 <?php require_once("./inc/header.php"); ?>
 

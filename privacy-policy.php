@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <?php $page_title = "Privacy Policy" ?>
 <?php require_once("./inc/header.php"); ?>
                     <header class="page-header page-header-dark bg-gradient-primary-to-secondary">

@@ -15,5 +15,6 @@ ob_start();
         setcookie('_uid_', '', time()  - 60 * 60 * 24, '/', '', '', true);
         setcookie('_uiid_', '', time() - 60 * 60 * 24, '/', '', '', true);
     }
-    header("Location: index.php");
+    $referer = $_SERVER['HTTP_REFERER'];
+    header("Location: $referer");
 ?>

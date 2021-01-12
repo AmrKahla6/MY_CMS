@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <?php $page_title = $_GET['category_name'] .' '. "Category" ?>
 <?php require_once("./inc/header.php"); ?>
                     <header class="page-header page-header-dark bg-secondary">
