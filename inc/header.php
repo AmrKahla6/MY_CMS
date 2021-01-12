@@ -38,7 +38,7 @@
                                 <?php
                                     if(isset($_SESSION['login'])){?>
                                         <form action="logout.php">
-                                            <button class="btn-teal btn rounded-pill px-4 ml-lg-4" >Sign Out (<?php echo $_SESSION['user_name'] ?>)<i class="fas fa-arrow-right ml-1"></i></button>
+                                            <button class="btn-teal btn rounded-pill px-4 ml-lg-4" >Sign Out : <?php echo $_SESSION['user_name'] ?><i class="fas fa-arrow-right ml-1"></i></button>
                                         </form>
                                     <?php } else{
                                         if(!isset($_COOKIE['_uid_']) && !isset($_COOKIE['_uiid_'])){
@@ -55,9 +55,9 @@
                                          ]);
                                          $user      = $stmt->fetch(PDO::FETCH_ASSOC);
                                          $user_name = $user['user_nickname'];
-                                        echo '<form action="logout.php">
-                                                <button class="btn-teal btn rounded-pill px-4 ml-lg-4" >Sign Out <?php echo $user_name ?><i class="fas fa-arrow-right ml-1"></i></button>
-                                             </form>';
+                                        // echo '<form action="logout.php">
+                                        //         <button class="btn-teal btn rounded-pill px-4 ml-lg-4" >Sign Out <?php echo $user_name <i class="fas fa-arrow-right ml-1"></i></button>
+                                        //      </form>';
                                      }
                                     }
                                 ?>
