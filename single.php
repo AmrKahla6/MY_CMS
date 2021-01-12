@@ -81,18 +81,41 @@
                                     <h2 class="mb-0">Comments</h2>
                                 </div>
                                 <hr class="mb-4" />
-                                <div class="card mb-5">
-                                    <div class="card-header d-flex justify-content-between">
-                                        <div class="mr-2 text-dark">
-                                            John Doe
-                                            <div class="text-xs text-muted">November 19, 2020 at 11:31 PM</div>
-                                        </div>
-                                        <div class="h5"><span class="badge badge-warning-soft text-warning font-weight-normal">Awaiting Response</span></div>
-                                    </div>
-                                    <div class="card-body">
-                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque blanditiis, exercitationem architecto accusamus quis repellendus magni nam ipsam id qui non itaque eos, consectetur maiores aperiam sapiente. Libero, possimus minus.
-                                    </div>
-                                </div>
+                                <?php
+                                    $sql3    = "SELECT * FROM comments WHERE com_post_id = :id AND com_status = :status";
+                                    $stmt3   = $pdo->prepare($sql3);
+                                    $stmt3->execute([
+                                        ':id'       => $_GET['post_id'],
+                                        ':status'   => 'approved',
+                                    ]);
+                                    $com_count = $stmt3->rowCount();
+
+                                    if($com_count == 0)
+                                    {
+                                        echo "<p class='m-4 p-1'> No Comments <p>";
+                                    } else {
+                                        while($comments = $stmt3->fetch(PDO::FETCH_ASSOC)){
+                                            $user_name  = $comments['com_user_name'];
+                                            $com_date   = $comments['com_date'];
+                                            $com_detail = $comments['com_detail'];
+                                            $com_status = $comments['com_status'];?>
+
+                                            <div class="card mb-5">
+                                                <div class="card-header d-flex justify-content-between">
+                                                    <div class="mr-2 text-dark">
+                                                        <?php echo $user_name ?>
+                                                        <div class="text-xs text-muted"><?php echo $com_date; ?></div>
+                                                    </div>
+                                                    <div class="h5"><span class="badge badge-warning-soft text-warning font-weight-normal"><?php echo $com_status ?></span></div>
+                                                </div>
+                                                <div class="card-body">
+                                                   <?php echo $com_detail ?>
+                                                </div>
+                                            </div>
+                                        <?php }
+                                    }
+                                ?>
+
 
                                 <?php
                                     if(isset($_COOKIE['_uid_']) || isset($_COOKIE['_uiid_']) || isset($_SESSION['login'])){?>
