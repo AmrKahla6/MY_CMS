@@ -222,6 +222,8 @@
                                     $catgeory_id    = $categories['category_id'];
                                     $catgeory_name  = $categories['category_name'];
                                     $total_posts    = $categories['category_total_posts'];
+
+                                    if($total_posts > 0) {
                                     $post_views     = $categories['total_post_views'];
                                     ?>
 
@@ -235,7 +237,7 @@
                                         >
                                     </div>
                                     <?php
-                                }
+                                }}
                             ?>
                             </div>
 

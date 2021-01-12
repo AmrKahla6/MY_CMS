@@ -7,6 +7,8 @@ ob_start();
         session_destroy();
         unset($_SESSION['login']);
         unset($_SESSION['user_name']);
+        unset($_SESSION['user_id']);
+        unset($_SESSION['user_nakename']);
         unset($_SESSION['user_role']);
     }
 

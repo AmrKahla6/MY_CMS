@@ -82,39 +82,67 @@
                                 </div>
                                 <hr class="mb-4" />
                                 <?php
-                                    $sql3    = "SELECT * FROM comments WHERE com_post_id = :id AND com_status = :status";
-                                    $stmt3   = $pdo->prepare($sql3);
-                                    $stmt3->execute([
-                                        ':id'       => $_GET['post_id'],
-                                        ':status'   => 'approved',
+                                    $sql = "SELECT * FROM comments WHERE com_status = :status AND com_post_id = :id";
+                                    $stmt = $pdo->prepare($sql);
+                                    $stmt->execute([
+                                        ':status' => 'approved',
+                                        ':id' => $_GET['post_id']
                                     ]);
-                                    $com_count = $stmt3->rowCount();
-
-                                    if($com_count == 0)
-                                    {
-                                        echo "<p class='m-4 p-1'> No Comments <p>";
+                                    $count = $stmt->rowCount();
+                                    if($count == 0) {
+                                        echo "No comments";
                                     } else {
-                                        while($comments = $stmt3->fetch(PDO::FETCH_ASSOC)){
-                                            $user_name  = $comments['com_user_name'];
-                                            $com_date   = $comments['com_date'];
+                                        $sql1  = "SELECT * FROM comments WHERE com_post_id = :id ORDER BY com_id DESC";
+                                        $stmt1 = $pdo->prepare($sql1);
+                                        $stmt1->execute([
+                                            ':id' => $_GET['post_id']
+                                        ]);
+                                        while($comments = $stmt1->fetch(PDO::FETCH_ASSOC)) {
+                                            $user_name = $comments['com_user_name'];
+                                            $com_date = $comments['com_date'];
                                             $com_detail = $comments['com_detail'];
-                                            $com_status = $comments['com_status'];?>
+                                            $com_status = $comments['com_status'];
+                                            $com_user_id = $comments['com_user_id'];
+                                            // com status unpproved and com_user_id == singedInUserID
+                                            if(isset($_SESSION['user_id'])) {
+                                                $user_id = $_SESSION['user_id'];
+                                            } else if(isset($_COOKIE['_uid_'])) {
+                                                $user_id = base64_decode($_COOKIE['_uid_']);
+                                            } else  {
+                                                $user_id = -1;
+                                            }
 
-                                            <div class="card mb-5">
-                                                <div class="card-header d-flex justify-content-between">
-                                                    <div class="mr-2 text-dark">
-                                                        <?php echo $user_name ?>
-                                                        <div class="text-xs text-muted"><?php echo $com_date; ?></div>
+                                            if($com_status == 'approved') { ?>
+                                                <div class="card mb-5">
+                                                    <div class="card-header d-flex justify-content-between">
+                                                        <div class="mr-2 text-dark">
+                                                            <?php echo $user_name; ?>
+                                                            <div class="text-xs text-muted"><?php echo $com_date; ?></div>
+                                                        </div>
                                                     </div>
-                                                    <div class="h5"><span class="badge badge-warning-soft text-warning font-weight-normal"><?php echo $com_status ?></span></div>
+                                                    <div class="card-body">
+                                                        <?php echo $com_detail; ?>
+                                                    </div>
                                                 </div>
-                                                <div class="card-body">
-                                                   <?php echo $com_detail ?>
+                                           <?php } else  if($com_status == 'unapproved' && $com_user_id == $user_id) { ?>
+                                                <div class="card mb-5">
+                                                    <div class="card-header d-flex justify-content-between">
+                                                        <div class="mr-2 text-dark">
+                                                            <?php echo $user_name; ?>
+                                                            <div class="text-xs text-muted"><?php echo $com_date; ?></div>
+                                                        </div>
+                                                        <div class="h5"><span class="badge badge-warning-soft text-warning font-weight-normal">Awaiting Response</span></div>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <?php echo $com_detail; ?>
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            <?php }
+                                            ?>
                                         <?php }
                                     }
                                 ?>
+
 
 
                                 <?php
@@ -141,10 +169,11 @@
                                                         ':post_id'      => $_GET['post_id'],
                                                         ':com_detail'   => $comment,
                                                         ':user_id'      => $user_id,
-                                                        ':user_name'    => $_SESSION['user_name'],
+                                                        ':user_name'    => $_SESSION['user_nakename'],
                                                         ':com_date'     => date("M n, Y") . ' at ' . date("h:i A"),
                                                         ':com_status'   => 'unapproved'
                                                     ]);
+                                                    header("Location: single.php?post_id={$_GET['post_id']}");
                                                 }
                                             ?>
                                                 <form action="single.php?post_id=<?php echo $_GET['post_id'] ?>" method="post">
@@ -157,8 +186,6 @@
                                         echo "<a href='./backend/signin.php'> Sign in to comment </a>";
                                     }
                                     ?>
-
-
                             </div>
                             <!--end comment section end-->
                         </div>
