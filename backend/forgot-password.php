@@ -43,9 +43,36 @@
                                                 ]);
                                                 $count = $stmt->rowCount();
                                                 if($count == 1) {
+                                                    $user     = $stmt->fetch(PDO::FETCH_ASSOC);
+                                                    $user_id  = $user['user_id'];
                                                     $show = "new password";
                                                 } else {
-                                                    echo "<p class='alert alert-danger'>Wrong credentials!</p>";
+                                                    echo "<p class='alert alert-danger text-center'>Wrong Email Or Password!</p>";
+                                                }
+                                            }
+
+                                            if(isset($_POST['update'])){
+                                                $password  = trim($_POST['password']);
+                                                $conf_pass = trim($_POST['confirm-password']);
+                                                $user_id   = $_POST['id'];
+                                                $show      = "new password";
+
+                                                if($password == $conf_pass){
+                                                    $reg="/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/";
+                                                    if(!preg_match($reg,$password)){
+                                                        echo "<div class='alert alert-danger text-center'>This password is weak , Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character</div>";
+                                                }else {
+                                                        $hash = password_hash($password, PASSWORD_BCRYPT, ['cost'=>10]);
+                                                        $sql  = "UPDATE users SET user_password = :password WHERE user_id = :id";
+                                                        $stmt = $pdo->prepare($sql);
+                                                        $stmt->execute([
+                                                            ':password' => $hash,
+                                                            ':id'       => $user_id,
+                                                        ]);
+                                                        echo "<div class='alert alert-success text-center'>Password updated successfuly <a href='signin.php'>login now</a></div>";
+                                                    }
+                                            }else{
+                                                    echo "<div class='alert alert-danger text-center'>Password doesn't match!</div>";
                                                 }
                                             }
                                         ?>
@@ -68,12 +95,13 @@
                                            <?php } else { ?>
                                                 <form action="forgot-password.php" method="POST">
                                                     <div class="form-group">
-                                                        <label class="small mb-1" for="passowrd">passowrd</label>
-                                                        <input name="passowrd" class="form-control py-4" id="passowrd" type="text" placeholder="Password" required="true" />
+                                                    <input type="hidden" name="id" value="<?php echo $user_id ?>">
+                                                        <label class="small mb-1" for="passowrd">Passowrd</label>
+                                                        <input name="password" class="form-control py-4" id="passowrd" type="password" placeholder="Password" required="true" />
                                                     </div>
                                                     <div class="form-group">
                                                         <label class="small mb-1" for="confirmpassword">Confirm Password</label>
-                                                        <input name="confirm-password" class="form-control py-4" type="text" placeholder="Confirm password" required="true" />
+                                                        <input name="confirm-password" class="form-control py-4" type="password" placeholder="Confirm password" required="true" />
                                                     </div>
                                                     <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0">
                                                         <button name="update" class="btn btn-primary" type="submit">Update Password</button>
