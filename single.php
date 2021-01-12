@@ -1,4 +1,3 @@
-<?php session_start(); ?>
 <?php $page_title = "Post details" ?>
 <?php require_once("./inc/header.php"); ?>
 
@@ -94,13 +93,21 @@
                                     </div>
                                 </div>
 
-                                <div class="card">
-                                    <div class="card-header">Add Comment</div>
-                                    <div class="card-body">
-                                        <textarea placeholder="Type here..." class="form-control mb-2" rows="4"></textarea>
-                                        <button class="btn btn-primary btn-sm mr-2">Post Comment</button>
-                                    </div>
-                                </div>
+                                <?php
+                                    if(isset($_COOKIE['_uid_']) || isset($_COOKIE['_uiid_']) || isset($_SESSION['login'])){?>
+                                        <div class="card">
+                                            <div class="card-header">Add Comment</div>
+                                            <div class="card-body">
+                                                <textarea placeholder="Type here..." class="form-control mb-2" rows="4"></textarea>
+                                                <button class="btn btn-primary btn-sm mr-2">Post Comment</button>
+                                            </div>
+                                        </div>
+                                    <?php } else {
+                                        echo "<a href='./backend/signin.php'> Sign in to comment </a>";
+                                    }
+                                    ?>
+
+
                             </div>
                             <!--end comment section end-->
                         </div>
