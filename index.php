@@ -166,10 +166,25 @@
                                 if($post_count > $post_per_page){?>
                                     <nav aria-label="Page navigation example">
                                         <ul class="pagination pagination-blog justify-content-center">
-                                            <li class="page-item disabled">
-                                                <a class="page-link" href="#!" aria-label="Previous"><span aria-hidden="true">&#xAB;</span></a>
-                                            </li>
-                                            <?php
+                                        <?php
+                                            if(isset($_GET['page']))
+                                            {
+                                                $prev = $_GET['page'] - 1;
+                                            } else {
+                                                $prev = 0;
+                                            }
+
+                                            if($prev + 1 <= 1){
+                                                echo    '<li class="page-item disabled">
+                                                            <a class="page-link" href="#!" aria-label="Previous"><span aria-hidden="true">&#xAB;</span></a>
+                                                        </li>';
+                                            } else {
+                                                echo    '<li class="page-item">
+                                                            <a class="page-link" href="index.php?page='. $prev .'" aria-label="Previous"><span aria-hidden="true">&#xAB;</span></a>
+                                                        </li>';
+                                            }
+                                        ?>
+                                        <?php
                                             if(isset($_GET['page'])){
                                                 $active = $_GET['page'];
                                             }else {
