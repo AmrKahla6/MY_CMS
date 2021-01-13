@@ -92,13 +92,33 @@
                                     </div>
                                 </div>
                             </a>
+                            <?php
+                                $sql  = "SELECT * FROM posts WHERE post_status = :status";
+                                $stmt = $pdo->prepare($sql);
+                                $stmt->execute([
+                                    ':status' => 'published'
+                                ]);
+                                $post_count = $stmt->rowCount();
+                                $post_per_page = 3;
+                                if (isset($_GET['page'])) {
+                                    $page = $_GET['page'];
+                                    if($page == 1) {
+                                        $page_id = 0;
+                                    } else {
+                                        $page_id = ($page * $post_per_page) - $post_per_page;
+                                    }
+                                } else {
+                                    $page = 1;
+                                    $page_id = 0;
+                                }
+                                $total_pager = ceil($post_count / $post_per_page);
+                            ?>
 
                             <h1>Recent posting:</h1>
                             <hr />
                             <div class="row">
                             <?php
-
-                                    $sql  = "SELECT * FROM posts WHERE post_status = :status ORDER BY post_id DESC LIMIT 0 , 6";
+                                    $sql  = "SELECT * FROM posts WHERE post_status = :status ORDER BY post_id DESC LIMIT $page_id, $post_per_page";
                                     $stmt = $pdo->prepare($sql);
                                     $stmt->execute([
                                         ":status" => "published"
@@ -118,7 +138,7 @@
 
                                         <div class="col-md-6 col-xl-4 mb-5">
                                             <a class="card post-preview lift h-100" href="single.php?post_id=<?php echo $post_id; ?>"
-                                                ><img class="card-img-top" src="./img/<?php echo $post_image ?>" alt="<?php echo $post_image ?>" />
+                                                ><img class="card-img-top" style="height: 250px; width=100%" src="./img/<?php echo $post_image ?>" alt="<?php echo $post_image ?>" />
                                                 <div class="card-body">
                                                     <h5 class="card-title"> <?php echo $post_title ?>  </h5>
                                                     <p class="card-text">   <?php echo substr($post_detail , 0 , 140) ?>  </p>
@@ -140,23 +160,37 @@
                                         <?php
                                     }
                             ?>
-
                             </div>
 
-                            <nav aria-label="Page navigation example">
-                                <ul class="pagination pagination-blog justify-content-center">
-                                    <li class="page-item disabled">
-                                        <a class="page-link" href="#!" aria-label="Previous"><span aria-hidden="true">&#xAB;</span></a>
-                                    </li>
-                                    <li class="page-item active"><a class="page-link" href="#!">1</a></li>
-                                    <li class="page-item"><a class="page-link" href="#!">2</a></li>
-                                    <li class="page-item"><a class="page-link" href="#!">3</a></li>
-                                    <li class="page-item"><a class="page-link" href="#!">12</a></li>
-                                    <li class="page-item">
-                                        <a class="page-link" href="#!" aria-label="Next"><span aria-hidden="true">&#xBB;</span></a>
-                                    </li>
-                                </ul>
-                            </nav>
+                            <?php
+                                if($post_count > $post_per_page){?>
+                                    <nav aria-label="Page navigation example">
+                                        <ul class="pagination pagination-blog justify-content-center">
+                                            <li class="page-item disabled">
+                                                <a class="page-link" href="#!" aria-label="Previous"><span aria-hidden="true">&#xAB;</span></a>
+                                            </li>
+                                            <?php
+                                            if(isset($_GET['page'])){
+                                                $active = $_GET['page'];
+                                            }else {
+                                                $active = 1;
+                                            }
+                                                for ($i = 1; $i <= $total_pager ; $i++) {
+                                                    if($i == $active){
+                                                        echo '<li class="page-item active"><a class="page-link" href="index.php>page=' . $i . '">' . $i . '</a></li>';
+                                                    } else {
+                                                        echo '<li class="page-item"><a class="page-link" href="index.php?page=' . $i . '">' . $i . '</a></li>';
+                                                    }
+                                                }
+                                            ?>
+                                            <li class="page-item">
+                                                <a class="page-link" href="#!" aria-label="Next"><span aria-hidden="true">&#xBB;</span></a>
+                                            </li>
+                                        </ul>
+                                    </nav>
+                                <?php }
+                            ?>
+
 
 
                             <h1 class="pt-5">Most viewed posts:</h1>
@@ -182,7 +216,7 @@
 
                                         <div class="col-md-6 col-xl-4 mb-5">
                                             <a class="card post-preview lift h-100" href="single.php?post_id=<?php echo $post_id; ?>"
-                                                ><img class="card-img-top" src="./img/<?php echo $post_image ?>" alt="<?php echo $post_image ?>" />
+                                                ><img class="card-img-top" style="height: 250px; width=100%" src="./img/<?php echo $post_image ?>" alt="<?php echo $post_image ?>" />
                                                 <div class="card-body">
                                                     <h5 class="card-title"> <?php echo $post_title ?>  </h5>
                                                     <p class="card-text">   <?php echo substr($post_detail , 0 , 140) ?>  </p>

@@ -86,7 +86,7 @@
                                     $stmt = $pdo->prepare($sql);
                                     $stmt->execute([
                                         ':status' => 'approved',
-                                        ':id' => $_GET['post_id']
+                                        ':id'     => $_GET['post_id']
                                     ]);
                                     $count = $stmt->rowCount();
                                     if($count == 0) {
@@ -98,10 +98,10 @@
                                             ':id' => $_GET['post_id']
                                         ]);
                                         while($comments = $stmt1->fetch(PDO::FETCH_ASSOC)) {
-                                            $user_name = $comments['com_user_name'];
-                                            $com_date = $comments['com_date'];
-                                            $com_detail = $comments['com_detail'];
-                                            $com_status = $comments['com_status'];
+                                            $user_name   = $comments['com_user_name'];
+                                            $com_date    = $comments['com_date'];
+                                            $com_detail  = $comments['com_detail'];
+                                            $com_status  = $comments['com_status'];
                                             $com_user_id = $comments['com_user_id'];
                                             // com status unpproved and com_user_id == singedInUserID
                                             if(isset($_SESSION['user_id'])) {
@@ -143,8 +143,6 @@
                                     }
                                 ?>
 
-
-
                                 <?php
                                     if(isset($_COOKIE['_uid_']) || isset($_COOKIE['_uiid_']) || isset($_SESSION['login'])){?>
                                         <div class="card">
@@ -159,6 +157,7 @@
 
                                                     $sql2    = "SELECT * FROM users WHERE user_name = :username";
                                                     $stmt2   = $pdo->prepare($sql2);
+
                                                     $stmt2->execute([
                                                         ':username' => $_SESSION['user_name'],
                                                     ]);
