@@ -13,7 +13,7 @@
                             $my_url = 'my-cms/search.php?key='.$_POST['search'];
 
                             $url = $scheme.'://' . $host.'/' . $my_url ;
-                            echo $url;
+                            // echo $url;
                             // $path1  = str_replace($path , $my_url , $url);
                             //  $url = "http://localhost/my-cms/search.php?key=".$_POST['search'];
                             header("Location: {$url}");

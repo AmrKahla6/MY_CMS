@@ -126,7 +126,7 @@
                             <div class="row">
                             <?php
 
-                                $sql  = "SELECT * FROM posts WHERE post_status = :status AND post_category_id = :id ORDER BY post_id DESC LIMIT 0 , 6";
+                                $sql  = "SELECT * FROM posts WHERE post_status = :status AND post_category_id = :id ORDER BY post_id DESC LIMIT $page_id, $post_per_page";
                                 $stmt = $pdo->prepare($sql);
                                 $stmt->execute([
                                     ":status" => "published",
@@ -147,7 +147,7 @@
 
                                     <div class="col-md-6 col-xl-4 mb-5">
                                         <a class="card post-preview lift h-100" href="single.php?post_id=<?php echo $post_id; ?>"
-                                            ><img class="card-img-top" src="./img/<?php echo $post_image ?>" alt="<?php echo $post_image ?>" />
+                                            ><img class="card-img-top" style="height: 250px; width=100%" src="./img/<?php echo $post_image ?>" alt="<?php echo $post_image ?>" />
                                             <div class="card-body">
                                                 <h5 class="card-title"> <?php echo $post_title ?>  </h5>
                                                 <p class="card-text">   <?php echo substr($post_detail , 0 , 140) ?>  </p>
@@ -260,7 +260,7 @@
 
                                         <div class="col-md-6 col-xl-4 mb-5">
                                             <a class="card post-preview lift h-100" href="single.php?post_id=<?php echo $post_id; ?>"
-                                                ><img class="card-img-top" src="./img/<?php echo $post_image ?>" alt="<?php echo $post_image ?>" />
+                                                ><img class="card-img-top" style="height: 250px; width=100%" src="./img/<?php echo $post_image ?>" alt="<?php echo $post_image ?>" />
                                                 <div class="card-body">
                                                     <h5 class="card-title"> <?php echo $post_title ?>  </h5>
                                                     <p class="card-text">   <?php echo substr($post_detail , 0 , 140) ?>  </p>

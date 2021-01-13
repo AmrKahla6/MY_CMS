@@ -3,10 +3,25 @@
 <?php require_once("./inc/header.php"); ?>
 
                     <?php
-                       if(isset($_POST['search']))
+                        if(isset($_POST['search'])){
+
+                            $url    = $_SERVER['HTTP_REFERER'];
+                            $url    = parse_url($url);
+                            $scheme = $url['scheme'];
+                            $host   = $url['host'];
+                            $path   = $url['path'] ;
+                            $my_url = 'my-cms/category-search.php?key='.$_POST['search'].'&cat_id='.$_POST['category-id'];
+
+                            $url = $scheme.'://' . $host.'/' . $my_url ;
+                            header("Location: {$url}");
+                            // echo $path1;
+                        }
+                     ?>
+                    <?php
+                       if(isset($_GET['key']))
                        {
-                           $keyword = $_POST['search'];
-                           $cat_id  = $_POST['category_id'];
+                           $keyword = $_GET['key'];
+                           $cat_id  = $_GET['cat_id'];
                            $sql     = "SELECT *
                                        FROM posts
                                        WHERE post_status = :status
@@ -52,24 +67,57 @@
                     <section class="bg-white py-10">
                         <div class="container">
 
+                        <?php
+                                $sql     = "SELECT *
+                                            FROM posts
+                                            WHERE post_status = :status
+                                            AND post_title
+                                            LIKE :title
+                                            AND post_category_id = :id";
+
+                                $stmt    = $pdo->prepare($sql);
+                                $stmt->execute([
+                                    ':status' => 'published',
+                                    ':title'  => '%'. trim($keyword) .'%',
+                                    ':id'     => $cat_id,
+                                ]);
+
+                                $post_count = $stmt->rowCount();
+                                $post_per_page = 3;
+                                if (isset($_GET['page'])) {
+                                    $page = $_GET['page'];
+                                    if($page == 1) {
+                                        $page_id = 0;
+                                    } else {
+                                        $page_id = ($page * $post_per_page) - $post_per_page;
+                                    }
+                                } else {
+                                    $page = 1;
+                                    $page_id = 0;
+                                }
+                                $total_pager = ceil($post_count / $post_per_page);
+                            ?>
+
                             <h1>Search Result:</h1>
                             <hr />
                             <div class="row">
                             <?php
-                                 $keyword = $_POST['search'];
-                                 $sql     = "SELECT *
-                                             FROM posts
-                                             WHERE post_status = :status
-                                             AND post_title
-                                             LIKE :title
-                                             ORDER BY post_id DESC
-                                             LIMIT 0, 6";
+                                    $sql     = "SELECT *
+                                                FROM posts
+                                                WHERE post_status = :status
+                                                AND post_title
+                                                LIKE :title
+                                                AND post_category_id = :id
+                                                LIMIT $page_id, $post_per_page";
 
-                                  $stmt    = $pdo->prepare($sql);
-                                  $stmt->execute([
-                                      ':status' => 'published',
-                                      ':title'  => '%'. trim($keyword) .'%'
-                                  ]);
+                                    $stmt    = $pdo->prepare($sql);
+                                    $stmt->execute([
+                                        ':status' => 'published',
+                                        ':title'  => '%'. trim($keyword) .'%',
+                                        ':id'     => $cat_id,
+                                    ]);
+
+
                                   $count = $stmt->rowCount();
 
                                   if($count == 0)
@@ -96,7 +144,7 @@
 
                                         <div class="col-md-6 col-xl-4 mb-5">
                                             <a class="card post-preview lift h-100" href="single.php?post_id=<?php echo $post_id; ?>"
-                                                ><img class="card-img-top" src="./img/<?php echo $post_image ?>" alt="<?php echo $post_image ?>" />
+                                                ><img class="card-img-top" style="height: 250px; width=100%" src="./img/<?php echo $post_image ?>" alt="<?php echo $post_image ?>" />
                                                 <div class="card-body">
                                                     <h5 class="card-title"> <?php echo $post_title ?>  </h5>
                                                     <p class="card-text">   <?php echo substr($post_detail , 0 , 140) ?>  </p>
@@ -122,21 +170,69 @@
                             ?>
                             </div>
 
-                            <nav aria-label="Page navigation example">
-                                <ul class="pagination pagination-blog justify-content-center">
-                                    <li class="page-item disabled">
-                                        <a class="page-link" href="#!" aria-label="Previous"><span aria-hidden="true">&#xAB;</span></a>
-                                    </li>
-                                    <li class="page-item active"><a class="page-link" href="#!">1</a></li>
-                                    <li class="page-item"><a class="page-link" href="#!">2</a></li>
-                                    <li class="page-item"><a class="page-link" href="#!">3</a></li>
-                                    <li class="page-item disabled"><a class="page-link" href="#!">...</a></li>
-                                    <li class="page-item"><a class="page-link" href="#!">12</a></li>
-                                    <li class="page-item">
-                                        <a class="page-link" href="#!" aria-label="Next"><span aria-hidden="true">&#xBB;</span></a>
-                                    </li>
-                                </ul>
-                            </nav>
+                            <?php
+                                if($post_count > $post_per_page){?>
+                                    <nav aria-label="Page navigation example">
+                                        <ul class="pagination pagination-blog justify-content-center">
+                                        <?php
+                                            if(isset($_GET['page']))
+                                            {
+                                                $prev = $_GET['page'] - 1;
+                                            } else {
+                                                $prev = 0;
+                                            }
+
+                                            if($prev + 1 <= 1){
+                                                echo    '<li class="page-item disabled">
+                                                            <a class="page-link" href="#!" aria-label="Previous"><span aria-hidden="true">&#xAB;</span></a>
+                                                        </li>';
+                                            } else {
+                                                echo    '<li class="page-item">
+                                                            <a class="page-link" href="category-search.php?key='. $_GET['key'] .'&cat_id='. $_GET['cat_id'] .'&page='. $prev .'" aria-label="Previous"><span aria-hidden="true">&#xAB;</span></a>
+                                                        </li>';
+                                            }
+                                        ?>
+                                        <?php
+                                            if(isset($_GET['page'])){
+                                                $active = $_GET['page'];
+                                            }else {
+                                                $active = 1;
+                                            }
+                                                for ($i = 1; $i <= $total_pager ; $i++) {
+                                                    if ($i == $active) {
+                                                        echo '<li class="page-item active"><a class="page-link" href="category-search.php?key='. $_GET['key'] .'&cat_id='. $_GET['cat_id'].'&page='. $i .'">' . $i . '</a></li>';
+                                                    } else {
+                                                        echo '<li class="page-item"><a class="page-link" href="category-search.php?key='. $_GET['key'] .'&cat_id='. $_GET['cat_id'].'&page='. $i .'">' . $i . '</a></li>';
+                                                    }
+                                                }
+                                            ?>
+
+                                            <?php
+                                                if(isset($_GET['page'])){
+                                                    $next = $_GET['page'] + 1 ;
+                                                } else {
+                                                    $next = 2;
+                                                }
+
+                                                if($next - 1 >= $total_pager){
+                                                    echo '<li class="page-item disabled">
+                                                            <a class="page-link" href="#!" aria-label="Next">
+                                                                <span aria-hidden="true">&#xBB;</span>
+                                                            </a>
+                                                          </li>';
+                                                } else {
+                                                    echo '<li class="page-item">
+                                                            <a class="page-link" href="category-search.php?key='. $_GET['key'] .'&cat_id='. $_GET['cat_id'].'&page=' . $next . '" aria-label="Next">
+                                                                 <span aria-hidden="true">&#xBB;</span>
+                                                            </a>
+                                                        </li>';
+                                                }
+                                            ?>
+
+                                        </ul>
+                                    </nav>
+                                <?php }
+                            ?>
 
                         </div>
 
