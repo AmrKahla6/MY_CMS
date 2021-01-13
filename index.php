@@ -192,7 +192,7 @@
                                             }
                                                 for ($i = 1; $i <= $total_pager ; $i++) {
                                                     if($i == $active){
-                                                        echo '<li class="page-item active"><a class="page-link" href="index.php>page=' . $i . '">' . $i . '</a></li>';
+                                                        echo '<li class="page-item active"><a class="page-link" href="index.php?page=' . $i . '">' . $i . '</a></li>';
                                                     } else {
                                                         echo '<li class="page-item"><a class="page-link" href="index.php?page=' . $i . '">' . $i . '</a></li>';
                                                     }
