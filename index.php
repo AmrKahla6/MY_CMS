@@ -183,9 +183,25 @@
                                                     }
                                                 }
                                             ?>
-                                            <li class="page-item">
-                                                <a class="page-link" href="#!" aria-label="Next"><span aria-hidden="true">&#xBB;</span></a>
-                                            </li>
+
+                                            <?php
+                                                if(isset($_GET['page'])){
+                                                    $next = $_GET['page'] + 1 ;
+                                                } else {
+                                                    $next = 2;
+                                                }
+
+                                                if($next - 1 >= $total_pager){
+                                                    echo '  <li class="page-item disabled">
+                                                                <a class="page-link" href="#!" aria-label="Next"><span aria-hidden="true">&#xBB;</span></a>
+                                                            </li>';
+                                                } else {
+                                                    echo '  <li class="page-item">
+                                                                <a class="page-link" href="index.php?page=' . $next . '" aria-label="Next"><span aria-hidden="true">&#xBB;</span></a>
+                                                            </li>';
+                                                }
+                                            ?>
+
                                         </ul>
                                     </nav>
                                 <?php }
