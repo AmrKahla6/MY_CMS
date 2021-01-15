@@ -68,9 +68,16 @@
                                                         <td><?php echo $x++ ?></td>
                                                         <td><?php echo $category_id ?></td>
                                                         <td>
-                                                            <a href="../categories.php?category_id=<?php echo $category_id ?>&category_name=<?php echo $category_name ?>" target="_blank">
-                                                                <?php echo $category_name ?>
-                                                            </a>
+                                                            <?php
+                                                                if($total_posts == 0){?>
+                                                                        <?php echo $category_name ?>
+                                                                <?php } else { ?>
+                                                                    <a href="../categories.php?category_id=<?php echo $category_id ?>&category_name=<?php echo $category_name ?>" target="_blank">
+                                                                        <?php echo $category_name ?>
+                                                                    </a>
+                                                               <?php }
+                                                            ?>
+
                                                         </td>
                                                         <td><?php echo $total_posts ?></td>
                                                         <td><?php echo $created_by ?></td>

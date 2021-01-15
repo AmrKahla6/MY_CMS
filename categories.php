@@ -63,14 +63,14 @@
                            ]);
                            $post = $stmt->fetch(PDO::FETCH_ASSOC);
 
-                            $post_id       = $post['post_id']       ;
-                            $post_title    = $post['post_title']    ;
-                            $post_detail   = $post['post_detail']   ;
-                            $post_category = $post['post_category_id'] ;
-                            $post_image    = $post['post_image']    ;
-                            $post_date     = $post['post_date']     ;
-                            $post_author   = $post['post_author']   ;
-                            $post_view     = $post['post_views']    ;
+                            $post_id       = isset($post["post_id"])          ? $post["post_id"]          : ''       ;
+                            $post_title    = isset($post["post_title"])       ? $post["post_title"]       : ''       ;
+                            $post_detail   = isset($post['post_detail'])      ?  $post['post_detail']     : ''       ;
+                            $post_category = isset($post['post_category_id']) ? $post['post_category_id'] : ''       ;
+                            $post_image    = isset($post['post_image'])       ? $post['post_image']       : ''       ;
+                            $post_date     = isset($post['post_date'])        ?  $post['post_date']       : ''       ;
+                            $post_author   = isset($post['post_author'])      ? $post['post_author']      : ''       ;
+                            $post_view     = isset($post['post_views'])       ? $post['post_views']       : ''       ;
 
                         ?>
                             <a class="card post-preview post-preview-featured lift mb-5" href="single.php?post_id=<?php echo $post_id ?>">
@@ -79,7 +79,13 @@
                                     <div class="col-lg-7">
                                         <div class="card-body">
                                             <div class="py-5">
-                                                <h5 class="card-title"><?php echo $post_title ?></h5>
+                                                <h5 class="card-title"><?php
+                                                    if($post_title){
+                                                        echo $post_title ;
+                                                    } else {
+                                                        echo "No posts in this category";
+                                                    }
+                                                ?></h5>
                                                 <p class="card-text">
                                                     <?php echo substr($post_detail , 0 , 140) ?>
                                                 </p>

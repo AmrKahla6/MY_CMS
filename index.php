@@ -289,7 +289,7 @@
                                     $total_posts    = $categories['category_total_posts'];
 
                                     if($total_posts > 0) {
-                                    $post_views     = $categories['total_post_views'];
+                                        $post_views     = $categories['total_post_views'];
                                     ?>
 
                                     <div class="col-lg-4 col-md-6 mb-5">
