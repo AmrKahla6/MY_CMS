@@ -5,12 +5,12 @@
                 if($curr_page == 'index.php') { ?>
                     <a class="nav-link collapsed pt-4 active" href="index.php">
                         <div class="nav-link-icon"><i data-feather="activity"></i></div>
-                        Dashboard
+                            Dashboard
                     </a>
                 <?php } else { ?>
                     <a class="nav-link collapsed pt-4" href="index.php">
                         <div class="nav-link-icon"><i data-feather="activity"></i></div>
-                        Dashboard
+                            Dashboard
                     </a>
                 <?php }
             ?>
