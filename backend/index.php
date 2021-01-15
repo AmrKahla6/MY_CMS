@@ -21,10 +21,17 @@
                             <div class="card bg-primary text-white mb-4">
                                 <div class="card-body d-flex align-items-center justify-content-between">
                                     <p>All Posts</p>
-                                    <p>32</p>
+                                    <?php
+                                        $sql  = "SELECT * FROM posts";
+                                        $stmt = $pdo->prepare($sql);
+                                        $stmt->execute();
+
+                                        $post_count = $stmt->rowCount()
+                                    ?>
+                                    <p><?php echo $post_count ?></p>
                                 </div>
                                 <div class="card-footer d-flex align-items-center justify-content-between">
-                                    <a class="small text-white stretched-link" href="#">View Details</a>
+                                    <a class="small text-white stretched-link" href="all-post.php">View Details</a>
                                     <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                                 </div>
                             </div>
@@ -33,10 +40,17 @@
                             <div class="card bg-warning text-white mb-4">
                                 <div class="card-body d-flex align-items-center justify-content-between">
                                     <p>Comments</p>
-                                    <p>32</p>
+                                    <?php
+                                        $sql  = "SELECT * FROM comments";
+                                        $stmt = $pdo->prepare($sql);
+                                        $stmt->execute();
+
+                                        $comments_count = $stmt->rowCount()
+                                    ?>
+                                    <p><?php echo $comments_count ?></p>
                                 </div>
                                 <div class="card-footer d-flex align-items-center justify-content-between">
-                                    <a class="small text-white stretched-link" href="#">View Details</a>
+                                    <a class="small text-white stretched-link" href="comments.php">View Details</a>
                                     <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                                 </div>
                             </div>
@@ -45,10 +59,17 @@
                             <div class="card bg-success text-white mb-4">
                                 <div class="card-body d-flex align-items-center justify-content-between">
                                     <p>Categories</p>
-                                    <p>32</p>
+                                    <?php
+                                        $sql  = "SELECT * FROM categories";
+                                        $stmt = $pdo->prepare($sql);
+                                        $stmt->execute();
+
+                                        $category_count = $stmt->rowCount()
+                                    ?>
+                                    <p><?php echo $category_count ?></p>
                                 </div>
                                 <div class="card-footer d-flex align-items-center justify-content-between">
-                                    <a class="small text-white stretched-link" href="#">View Details</a>
+                                    <a class="small text-white stretched-link" href="categories.php">View Details</a>
                                     <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                                 </div>
                             </div>
@@ -56,11 +77,20 @@
                         <div class="col-xl-3 col-md-6">
                             <div class="card bg-danger text-white mb-4">
                                 <div class="card-body d-flex align-items-center justify-content-between">
-                                    <p>Pages</p>
-                                    <p>32</p>
+                                    <p>Users</p>
+                                    <?php
+                                        $sql  = "SELECT * FROM users WHERE user_role = :role";
+                                        $stmt = $pdo->prepare($sql);
+                                        $stmt->execute([
+                                            ':role' => 'subscriber',
+                                        ]);
+
+                                        $users_count = $stmt->rowCount()
+                                    ?>
+                                    <p><?php echo $users_count ?></p>
                                 </div>
                                 <div class="card-footer d-flex align-items-center justify-content-between">
-                                    <a class="small text-white stretched-link" href="#">View Details</a>
+                                    <a class="small text-white stretched-link" href="users.php">View Details</a>
                                     <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                                 </div>
                             </div>
@@ -75,6 +105,7 @@
                                     <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
                                         <thead>
                                             <tr>
+                                                <th>#</th>
                                                 <th>ID</th>
                                                 <th>Post Title</th>
                                                 <th>Post Category</th>
@@ -85,45 +116,51 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+                                        <?php
+                                            $sql  = "SELECT * FROM posts WHERE post_status = :status ORDER BY post_views DESC LIMIT 0,5";
+                                            $stmt = $pdo->prepare($sql);
+                                            $stmt->execute([
+                                                ':status' => 'published',
+                                            ]);
+
+                                            $x = 1;
+
+                                        while($posts = $stmt->fetch(PDO::FETCH_ASSOC)){
+                                            $post_id          = $posts['post_id'];
+                                            $post_title       = $posts['post_title'];
+                                            $post_views       = $posts['post_views'];
+                                            $post_image       = $posts['post_image'];
+                                            $post_date        = $posts['post_date'];
+                                            $post_author      = $posts['post_author'];
+                                            $post_category_id = $posts['post_category_id'];
+
+                                            $sql1  = "SELECT * FROM categories WHERE category_id = :id";
+                                            $stmt1 = $pdo->prepare($sql1);
+                                            $stmt1->execute([
+                                                ':id' => $post_category_id,
+                                            ]);
+                                            $category      = $stmt1->fetch(PDO::FETCH_ASSOC);
+                                            $category_name = $category['category_name']; ?>
+
                                             <tr>
-                                                <td>1</td>
+                                                <td><?php echo $x++?></td>
+                                                <td><?php echo $post_id ?></td>
                                                 <td>
-                                                    <a href="#">
-                                                        I Love You!
+                                                    <a href="../single.php?post_id=<?php echo $post_id ?>" target="_blank">
+                                                        <?php echo $post_title ?>
                                                     </a>
                                                 </td>
-                                                <td>Love</td>
-                                                <td>61</td>
-                                                <td>Photo</td>
-                                                <td>MD. A. Barik</td>
-                                                <td>17 Nov 20</td>
-                                            </tr>
-                                            <tr>
-                                                <td>2</td>
+                                                <td><?php echo $category_name ?></td>
+                                                <td><?php echo $post_views ?></td></td>
                                                 <td>
-                                                    <a href="#">
-                                                        I Love You!
-                                                    </a>
+                                                    <img src="../img/<?php echo $post_image?>" heigth ="50px" width="50px" alt="<?php echo $post_image?>">
                                                 </td>
-                                                <td>Love</td>
-                                                <td>61</td>
-                                                <td>Photo</td>
-                                                <td>MD. A. Barik</td>
-                                                <td>17 Nov 20</td>
+                                                <td><?php echo $post_author?></td>
+                                                <td><?php echo $post_date?></td>
                                             </tr>
-                                            <tr>
-                                                <td>3</td>
-                                                <td>
-                                                    <a href="#">
-                                                        I Love You!
-                                                    </a>
-                                                </td>
-                                                <td>Love</td>
-                                                <td>61</td>
-                                                <td>Photo</td>
-                                                <td>MD. A. Barik</td>
-                                                <td>17 Nov 20</td>
-                                            </tr>
+
+                                        <?php }
+                                        ?>
                                         </tbody>
                                     </table>
                                 </div>

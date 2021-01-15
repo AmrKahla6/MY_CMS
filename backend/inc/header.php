@@ -1,5 +1,6 @@
 <?php session_start(); ?>
 <?php ob_start(); ?>
+<?php require_once("../inc/db.php")?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -143,7 +144,7 @@
                 <nav class="sidenav shadow-right sidenav-light">
                     <div class="sidenav-menu">
                         <div class="nav accordion" id="accordionSidenav">
-                            <a class="nav-link collapsed pt-4" href="index.html">
+                            <a class="nav-link collapsed pt-4" href="index.php">
                                 <div class="nav-link-icon"><i data-feather="activity"></i></div>
                                 Dashboard
                             </a>
