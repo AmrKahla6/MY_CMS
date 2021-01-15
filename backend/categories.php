@@ -1,4 +1,5 @@
 <?php include_once "./inc/header.php"?>
+<?php include_once "./inc/sidebar.php"?>
 
             <div id="layoutSidenav_content">
                 <main>
