@@ -4,17 +4,19 @@
 
                     <?php
                         if(isset($_POST['search'])){
-
                             $url    = $_SERVER['HTTP_REFERER'];
                             $url    = parse_url($url);
                             $scheme = $url['scheme'];
                             $host   = $url['host'];
                             $path   = $url['path'] ;
-                            $my_url = 'my-cms/category-search.php?key='.$_POST['search'].'&cat_id='.$_POST['category-id'];
+                            $replace  = str_replace('categories.php' , '' , $path);
+
+                            $my_url = $replace.'/category-search.php?key='.$_POST['search'].'&cat_id='.$_POST['category_id'];
 
                             $url = $scheme.'://' . $host.'/' . $my_url ;
                             header("Location: {$url}");
-                            // echo $path1;
+
+                            // http://localhost/my-cms/category-search.php?key=Amos&cat_id=
                         }
                      ?>
                     <?php

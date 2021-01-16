@@ -4,20 +4,12 @@
 
                     <?php
                         if(isset($_POST['search'])){
-
-                            $url    = $_SERVER['HTTP_REFERER'];
-                            $url    = parse_url($url);
-                            $scheme = $url['scheme'];
-                            $host   = $url['host'];
-                            $path   = $url['path'] ;
-                            $my_url = 'my-cms/search.php?key='.$_POST['search'];
-
-                            $url = $scheme.'://' . $host.'/' . $my_url ;
-                            // echo $url;
-                            // $path1  = str_replace($path , $my_url , $url);
-                            //  $url = "http://localhost/my-cms/search.php?key=".$_POST['search'];
+                            $url      = $_SERVER['HTTP_REFERER'];
+                            $replace  = str_replace('index.php' , '' , $url);
+                            $url      = $replace.'search.php?key='.$_POST['search'];
                             header("Location: {$url}");
-                            // echo $path1;
+
+                            // http://localhost/my-cms/search.php?key=Amos
                         }
                      ?>
                     <?php
