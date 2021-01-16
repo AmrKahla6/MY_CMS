@@ -95,7 +95,27 @@
                                                             <button class="btn btn-blue btn-icon"><i data-feather="edit"></i></button>
                                                         </td>
                                                         <td>
-                                                            <button class="btn btn-red btn-icon"><i data-feather="trash-2"></i></button>
+                                                        <?php
+                                                            if(isset($_POST['delete-category'])){
+                                                                $sql  = "DELETE FROM categories WHERE category_id = :id";
+                                                                $stmt = $pdo->prepare($sql);
+                                                                $stmt->execute([
+                                                                    ':id' => $_POST['id'],
+                                                                ]);
+                                                                    header("Location: categories.php");
+                                                            }
+                                                        ?>
+
+                                                        <?php
+                                                            if($total_posts == 0){ ?>
+                                                            <form action="categories.php" method="post">
+                                                                <input type="hidden" name="id" value="<?php echo $category_id ?>">
+                                                                <button name="delete-category" class="btn btn-red btn-icon"><i data-feather="trash-2"></i></button>
+                                                            </form>
+                                                            <?php } else{ ?>
+                                                                <button title="You can not delete category having a posts!" name="delete-category" class="btn btn-red btn-icon"><i data-feather="trash-2"></i></button>
+                                                            <?php }
+                                                        ?>
                                                         </td>
                                                     </tr>
 
