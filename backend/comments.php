@@ -38,6 +38,7 @@
                                     <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
                                         <thead>
                                             <tr>
+                                                <th>#</th>
                                                 <th>ID</th>
                                                 <th>User Name</th>
                                                 <th>User Email</th>
@@ -51,65 +52,87 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>
-                                                    Md. A. Barik
-                                                </td>
-                                                <td>
-                                                    mdabarik19@gmail.com
-                                                </td>
-                                                <td>
-                                                    <a href="#">
-                                                        Post Title
-                                                    </a>
-                                                </td>
-                                                <td>Details</td>
-                                                <td>17 Nov 2020</td>
-                                                <td>
-                                                    <div class="badge badge-success">
-                                                        Approved
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <button class="btn btn-success btn-icon"><i data-feather="check"></i></button>
-                                                </td>
-                                                <td>
-                                                    <button class="btn btn-red btn-icon"><i data-feather="delete"></i></button>
-                                                </td>
-                                                <td>
-                                                    <button class="btn btn-red btn-icon"><i data-feather="trash-2"></i></button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>2</td>
-                                                <td>
-                                                    Md. A. Barik
-                                                </td>
-                                                <td>
-                                                    mdabarik19@gmail.com
-                                                </td>
-                                                <td>
-                                                    <a href="#">
-                                                        Post Title
-                                                    </a>
-                                                </td>
-                                                <td>Details</td>
-                                                <td>17 Nov 2020</td>
-                                                <td>
-                                                    <div class="badge badge-success">Approved
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <button class="btn btn-success btn-icon"><i data-feather="check"></i></button>
-                                                </td>
-                                                <td>
-                                                    <button class="btn btn-red btn-icon"><i data-feather="delete"></i></button>
-                                                </td>
-                                                <td>
-                                                    <button class="btn btn-red btn-icon"><i data-feather="trash-2"></i></button>
-                                                </td>
-                                            </tr>
+
+                                        <?php
+                                            $sql  = "SELECT * FROM comments ORDER BY com_id DESC";
+                                            $stmt = $pdo->prepare($sql);
+                                            $stmt->execute();
+                                            $x = 1;
+
+                                            while($comments = $stmt->fetch(PDO::FETCH_ASSOC)){
+                                                $com_id        = $comments['com_id'];
+                                                $com_post_id   = $comments['com_post_id'];
+                                                $com_detail    = $comments['com_detail'];
+                                                $com_user_id   = $comments['com_user_id'];
+                                                $com_user_name = $comments['com_user_name'];
+                                                $com_date      = $comments['com_date'];
+                                                $com_status    = $comments['com_status'];
+
+                                                //user name & user email from user table
+                                                $sql1  = "SELECT * FROM users WHERE user_id = :id";
+                                                $stmt1 = $pdo->prepare($sql1);
+                                                $stmt1->execute([
+                                                    ':id' => $com_user_id
+                                                ]);
+                                                    $user       = $stmt1->fetch(PDO::FETCH_ASSOC);
+                                                    $user_name  = $user['user_name'];
+                                                    $user_email = $user['user_email'];
+
+                                                //post_id & user post_title from posts table
+
+                                                 $sql2  = "SELECT * FROM posts WHERE post_id = :id";
+                                                 $stmt2 = $pdo->prepare($sql2);
+                                                 $stmt2->execute([
+                                                     ':id' => $com_post_id
+                                                 ]);
+
+                                                 $post       = $stmt2->fetch(PDO::FETCH_ASSOC);
+                                                 $post_id    = $post['post_id'];
+                                                 $post_title = $post['post_title'];
+                                                ?>
+                                                <tr>
+                                                    <td><?php echo $x++ ?></td>
+                                                    <td><?php echo $com_id ?></td>
+                                                    <td>
+                                                        <?php echo $user_name ?>
+                                                    </td>
+                                                    <td>
+                                                        <?php echo $user_email ?>
+                                                    </td>
+
+                                                    <td>
+                                                        <a href="../single.php?post_id=<?php echo $post_id ?>" target="_blank">
+                                                            <?php echo $post_title ?>
+                                                        </a>
+                                                    </td>
+                                                    <td><?php echo $com_detail ?></td>
+                                                    <td><?php echo $com_date ?></td>
+                                                    <td>
+                                                        <?php
+                                                            if($com_status == "approved"){ ?>
+                                                                <div class="badge badge-success">
+                                                                    <?php echo $com_status ?>
+                                                                </div>
+                                                            <?php } else { ?>
+                                                                <div class="badge badge-warning">
+                                                                    <?php echo $com_status ?>
+                                                                </div>
+                                                            <?php }
+                                                        ?>
+                                                    </td>
+                                                    <td>
+                                                        <button class="btn btn-success btn-icon"><i data-feather="check"></i></button>
+                                                    </td>
+                                                    <td>
+                                                        <button class="btn btn-red btn-icon"><i data-feather="delete"></i></button>
+                                                    </td>
+                                                    <td>
+                                                        <button class="btn btn-red btn-icon"><i data-feather="trash-2"></i></button>
+                                                    </td>
+                                                </tr>
+                                            <?php }
+                                        ?>
+
                                         </tbody>
                                     </table>
                                 </div>
