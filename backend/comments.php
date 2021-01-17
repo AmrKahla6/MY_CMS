@@ -171,7 +171,23 @@
                                                     ?>
                                                     </td>
                                                     <td>
-                                                        <button class="btn btn-red btn-icon"><i data-feather="trash-2"></i></button>
+                                                    <?php
+                                                        if(isset($_POST['delete'])){
+                                                            $com_id = $_POST['comment_id'];
+
+                                                            $sql  = "DELETE FROM comments WHERE com_id =:id";
+                                                            $stmt = $pdo->prepare($sql);
+                                                            $stmt->execute([
+                                                                ':id' => $com_id,
+                                                            ]);
+
+                                                            header("Location: comments.php");
+                                                        }
+                                                    ?>
+                                                        <form action="comments.php" method="post">
+                                                            <input type="hidden"  name="comment_id" value="<?php echo $com_id ?>">
+                                                            <button type="submit" name="delete" class="btn btn-red btn-icon"><i data-feather="trash-2"></i></button>
+                                                        </form>
                                                     </td>
                                                 </tr>
                                             <?php }
