@@ -82,10 +82,10 @@
                                 </div>
                                 <hr class="mb-4" />
                                 <?php
-                                    $sql = "SELECT * FROM comments WHERE com_status = :status AND com_post_id = :id";
+                                    $sql = "SELECT * FROM comments WHERE com_post_id = :id";
                                     $stmt = $pdo->prepare($sql);
                                     $stmt->execute([
-                                        ':status' => 'approved',
+                                        // ':status' => 'approved',
                                         ':id'     => $_GET['post_id']
                                     ]);
                                     $count = $stmt->rowCount();
@@ -154,6 +154,14 @@
                                                     $sql     = "INSERT INTO comments (com_post_id, com_detail, com_user_id, com_user_name, com_date, com_status)
                                                                 VALUE (:post_id, :com_detail, :user_id, :user_name, :com_date, :com_status)";
                                                     $stmt    = $pdo->prepare($sql);
+
+                                                    if(isset($_SESSION['user_id'])) {
+                                                        $user_id = $_SESSION['user_id'];
+                                                    } else if(isset($_COOKIE['_uid_'])) {
+                                                        $user_id = base64_decode($_COOKIE['_uid_']);
+                                                    } else  {
+                                                        $user_id = -1;
+                                                    }
 
                                                     $sql2    = "SELECT * FROM users WHERE user_name = :username";
                                                     $stmt2   = $pdo->prepare($sql2);
