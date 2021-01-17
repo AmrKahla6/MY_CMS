@@ -121,7 +121,29 @@
                                                         ?>
                                                     </td>
                                                     <td>
-                                                        <button class="btn btn-success btn-icon"><i data-feather="check"></i></button>
+                                                    <?php
+                                                        if(isset($_POST['approve'])){
+                                                            $comment_id = $_POST['comment_id'];
+
+                                                            $sql  = "UPDATE comments SET com_status = :status WHERE com_id = :id";
+                                                            $stmt = $pdo->prepare($sql);
+                                                            $stmt->execute([
+                                                                ':status' => 'approved',
+                                                                ':id'  => $comment_id
+                                                            ]);
+                                                            header("Location: comments.php");
+                                                        }
+                                                    ?>
+                                                    <?php
+                                                        if($com_status == "approved"){?>
+                                                            <button title="The status already approved" class="btn btn-success btn-icon"><i data-feather="check"></i></button>
+                                                        <?php } else { ?>
+                                                            <form action="comments.php" method="post">
+                                                            <input type="hidden" name="comment_id" value="<?php echo $com_id ?>">
+                                                                <button type="submit" name="approve" class="btn btn-success btn-icon"><i data-feather="check"></i></button>
+                                                            </form>
+                                                       <?php }
+                                                    ?>
                                                     </td>
                                                     <td>
                                                         <button class="btn btn-red btn-icon"><i data-feather="delete"></i></button>
