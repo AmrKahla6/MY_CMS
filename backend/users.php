@@ -25,7 +25,7 @@
                                     <div class="page-header-icon"><i data-feather="users"></i></div>
                                     <span>All Users</span>
                                 </h1>
-                                <a href="new-user.html" title="Add new category" class="btn btn-white">
+                                <a href="new-user.php" title="Add new category" class="btn btn-white">
                                     <div class="page-header-icon"><i data-feather="plus"></i></div>
                                 </a>
                             </div>
@@ -100,10 +100,28 @@
                                                         header("Location: users.php");
                                                     }
                                                 ?>
-                                                <form action="users.php" method="post">
-                                                    <input type="hidden" name="user_id" value="<?php echo $user_id ?>">
-                                                    <button name="del_user" class="btn btn-red btn-icon"><i data-feather="trash-2"></i></button>
-                                                </form>
+
+                                                <?php
+                                                    if(isset($_COOKIE['_uid_'])){
+                                                        $u_id = base64_decode($_COOKIE['_uid_']);
+                                                    }else if(isset($_SESSION['user_id'])){
+                                                        $u_id = $_SESSION['user_id'];
+                                                    } else {
+                                                        $u_id = -1;
+                                                    }
+                                                ?>
+
+                                                <?php
+                                                    if($user_id == $u_id){
+                                                        echo '<button title="You can not delete yourself" class="btn btn-red btn-icon"><i data-feather="trash-2"></i></button>';
+                                                    } else { ?>
+                                                        <form action="users.php" method="post">
+                                                            <input type="hidden" name="user_id" value="<?php echo $user_id ?>">
+                                                            <button name="del_user" type="submit" class="btn btn-red btn-icon"><i data-feather="trash-2"></i></button>
+                                                        </form>
+                                                   <?php }
+                                                ?>
+
 
                                                 </td>
                                             </tr>
