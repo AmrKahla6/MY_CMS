@@ -80,6 +80,7 @@
                                     <div class="form-group">
                                         <label for="post-status">Status:</label>
                                         <select class="form-control" name="category_status" id="post-status">
+                                            <option class="disabled">Choose Status</option>
                                             <option value="published" <?php if(isset($_POST["category_status"]) && $_POST["category_status"] == 'published') { echo 'selected' ;} ?>>Published</option>
                                             <option value="pendding"  <?php if(isset($_POST["category_status"]) && $_POST["category_status"] == 'pendding') { echo 'selected' ;} ?>>Pendding</option>
                                         </select>

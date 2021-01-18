@@ -53,7 +53,7 @@
                                         </thead>
                                         <tbody>
                                         <?php
-                                            $sql  = "SELECT * FROM users";
+                                            $sql  = "SELECT * FROM users ORDER BY user_id DESC";
                                             $stmt = $pdo->prepare($sql);
                                             $stmt->execute();
                                             $x = 1;
@@ -68,7 +68,7 @@
                                                 ?>
                                             <tr>
                                                 <td><?php echo $x++ ?></td>
-                                                <td><?php echo $x++ ?></td>
+                                                <td><?php echo $user_id ?></td>
                                                 <td>
                                                     <?php echo $user_name ?>
                                                 </td>
@@ -96,6 +96,7 @@
                                                         $stmt->execute([
                                                             ':id' => $u_id,
                                                         ]);
+
 
                                                         header("Location: users.php");
                                                     }
