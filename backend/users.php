@@ -40,6 +40,7 @@
                                     <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
                                         <thead>
                                             <tr>
+                                                <th>#</th>
                                                 <th>ID</th>
                                                 <th>User Name</th>
                                                 <th>User Email</th>
@@ -51,50 +52,65 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+                                        <?php
+                                            $sql  = "SELECT * FROM users";
+                                            $stmt = $pdo->prepare($sql);
+                                            $stmt->execute();
+                                            $x = 1;
+
+                                            while($users = $stmt->fetch(PDO::FETCH_ASSOC)){
+                                                $user_id       = $users['user_id'];
+                                                $user_name     = $users['user_name'];
+                                                $user_email    = $users['user_email'];
+                                                $user_photo    = $users['user_photo'];
+                                                $registered_on = $users['registered_on'];
+                                                $user_role     = $users['user_role'];
+                                                ?>
                                             <tr>
-                                                <td>1</td>
+                                                <td><?php echo $x++ ?></td>
+                                                <td><?php echo $x++ ?></td>
                                                 <td>
-                                                    Md. A. Barik
+                                                    <?php echo $user_name ?>
                                                 </td>
                                                 <td>
-                                                    mdabarik19@gmail.com
+                                                    <?php echo $user_email ?>
                                                 </td>
-                                                <td>Photo</td>
-                                                <td>17 Nov 2020</td>
                                                 <td>
-                                                    <div class="badge badge-success">
-                                                        Subscriber
+                                                    <img class="img-thumbnail" src="../img/users/<?php echo $user_photo ?>" alt="<?php echo $user_photo ?>" width="50px" hieght="50px" srcset="">
+                                                </td>
+                                                <td><?php echo $registered_on ?></td>
+                                                <td>
+                                                    <div class="badge badge-<?php echo $user_role == "admin" ? "red" : "success" ?>">
+                                                        <?php echo $user_role ?>
                                                     </div>
                                                 </td>
                                                 <td>
                                                     <button class="btn btn-primary btn-icon"><i data-feather="edit"></i></button>
                                                 </td>
                                                 <td>
-                                                    <button class="btn btn-red btn-icon"><i data-feather="trash-2"></i></button>
+                                                <?php
+                                                    if(isset($_POST['del_user'])){
+                                                        $u_id = $_POST['user_id'];
+                                                        $sql  = "DELETE FROM users WHERE user_id = :id";
+                                                        $stmt = $pdo->prepare($sql);
+                                                        $stmt->execute([
+                                                            ':id' => $u_id,
+                                                        ]);
+
+                                                        header("Location: users.php");
+                                                    }
+                                                ?>
+                                                <form action="users.php" method="post">
+                                                    <input type="hidden" name="user_id" value="<?php echo $user_id ?>">
+                                                    <button name="del_user" class="btn btn-red btn-icon"><i data-feather="trash-2"></i></button>
+                                                </form>
+
                                                 </td>
                                             </tr>
-                                            <tr>
-                                                <td>2</td>
-                                                <td>
-                                                    Md. A. Barik
-                                                </td>
-                                                <td>
-                                                    mdabarik19@gmail.com
-                                                </td>
-                                                <td>Photo</td>
-                                                <td>17 Nov 2020</td>
-                                                <td>
-                                                    <div class="badge badge-success">
-                                                        Subscriber
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <button class="btn btn-primary btn-icon"><i data-feather="edit"></i></button>
-                                                </td>
-                                                <td>
-                                                    <button class="btn btn-red btn-icon"><i data-feather="trash-2"></i></button>
-                                                </td>
-                                            </tr>
+                                           <?php }
+                                        ?>
+
+
                                         </tbody>
                                     </table>
                                 </div>
