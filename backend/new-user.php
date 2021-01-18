@@ -29,32 +29,46 @@
                         </div>
                     </div>
 
+                    <?php
+                        if(isset($_POST['user_create'])){
+                            echo "Hi";
+                        }
+                    ?>
+
                     <!--Start Table-->
                     <div class="container-fluid mt-n10">
                         <div class="card mb-4">
                             <div class="card-header">Create New User</div>
                             <div class="card-body">
-                                <form>
+                                <form action="new-user.php" method="POST" enctype="multipart/form-data">
+                                    <div class="form-group">
+                                        <label for="name">Name:</label>
+                                        <input name="name" class="form-control" id="name" type="text" placeholder="User Full Name..." />
+                                    </div>
                                     <div class="form-group">
                                         <label for="user-name">User Name:</label>
-                                        <input class="form-control" id="user-name" type="text" placeholder="User Name..." />
+                                        <input name="user-name" class="form-control" id="user-name" type="text" placeholder="User Name..." />
                                     </div>
                                     <div class="form-group">
                                         <label for="user-email">User Email:</label>
-                                        <input class="form-control" id="user-email" type="email" placeholder="User Email..." />
+                                        <input name="user-email" class="form-control" id="user-email" type="email" placeholder="User Email..." />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="user-password">User Password:</label>
+                                        <input name="user-pass" class="form-control" id="user-password" type="password" placeholder="User Password..." />
                                     </div>
                                     <div class="form-group">
                                         <label for="user-role">Role:</label>
-                                        <select class="form-control" id="user-role">
-                                            <option>Admin</option>
-                                            <option>Subscriber</option>
+                                        <select name="user-role" class="form-control" id="user-role">
+                                            <option value="admin">Admin</option>
+                                            <option value="subscriber">subscriber</option>
                                         </select>
                                         <div class="form-group">
                                         <label for="post-title">Choose photo:</label>
-                                        <input class="form-control" id="post-title" type="file" />
+                                        <input name="user-photo" class="form-control-file" id="post-title" type="file" />
                                     </div>
                                     </div>
-                                    <button class="btn btn-primary mr-2 my-1" type="button">Create now!</button>
+                                    <button name="user_create" class="btn btn-primary mr-2 my-1" type="submit">Create now!</button>
                                 </form>
                             </div>
                         </div>

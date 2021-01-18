@@ -36,9 +36,9 @@
                                     </li>
                                 </ul>
                                 <?php
-                                    if(isset($_SESSION['login'])){?>
+                                    if(isset($_SESSION['login']) || isset($_COOKIE['_uiid_'])){?>
                                         <form action="logout.php">
-                                            <button class="btn-teal btn rounded-pill px-4 ml-lg-4" >Sign Out : <?php echo $_SESSION['user_name'] ?><i class="fas fa-arrow-right ml-1"></i></button>
+                                            <button class="btn-teal btn rounded-pill px-4 ml-lg-4" >Sign Out : <?php echo isset($_SESSION['user_name']) ? $_SESSION['user_name'] : base64_decode($_COOKIE['_uiid_'])  ?><i class="fas fa-arrow-right ml-1"></i></button>
                                         </form>
                                     <?php } else{
                                         if(!isset($_COOKIE['_uid_']) && !isset($_COOKIE['_uiid_'])){
