@@ -85,7 +85,27 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <button class="btn btn-primary btn-icon"><i data-feather="edit"></i></button>
+                                                    <?php
+                                                       if(isset($_COOKIE['_uid_'])){
+                                                        $u_id = base64_decode($_COOKIE['_uid_']);
+                                                    }else if(isset($_SESSION['user_id'])){
+                                                        $u_id = $_SESSION['user_id'];
+                                                    } else {
+                                                        $u_id = -1;
+                                                    }
+                                                    ?>
+
+                                                    <?php
+                                                      if($user_id == $u_id){ ?>
+                                                         <button title="You can not edit yourself" class="btn btn-primary btn-icon"><i data-feather="edit"></i></button>
+                                                    <?php } else { ?>
+                                                        <form action="user-update.php" method="post">
+                                                            <input type="hidden" name="user-id" value="<?php echo $user_id ?>">
+                                                            <button name="edit_user" type="submit" class="btn btn-primary btn-icon"><i data-feather="edit"></i></button>
+                                                        </form>
+                                                    <?php }
+                                                    ?>
+
                                                 </td>
                                                 <td>
                                                 <?php
@@ -96,8 +116,6 @@
                                                         $stmt->execute([
                                                             ':id' => $u_id,
                                                         ]);
-
-
                                                         header("Location: users.php");
                                                     }
                                                 ?>

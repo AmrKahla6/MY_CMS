@@ -63,10 +63,8 @@
                                 $pass_hash  = password_hash($user_pass, PASSWORD_BCRYPT, ['cost' => 10]);
                                 $user_photo = $_FILES['user-photo']['name'];
                                 $photo_temp = $_FILES['user-photo']['tmp_name'];
-                                $uid = $_SESSION['user_id'];
-                                $fdir= $uid.".jpg";
 
-                                move_uploaded_file("{$photo_temp}", "../img/users/{$fdir}");
+                                move_uploaded_file("{$photo_temp}", "../img/users/{$user_photo}");
 
                                 $sql  = "INSERT INTO users (user_name, user_nickname, user_email, user_password, user_photo, registered_on, user_role)
                                          VALUES (:name, :user_name, :user_email, :user_pass, :user_photo, :reg_in, :user_role)";
@@ -77,7 +75,7 @@
                                     ':user_name'   => $user_name,
                                     ':user_email'  => $user_email,
                                     ':user_pass'   => $pass_hash,
-                                    ':user_photo'  => $fdir,
+                                    ':user_photo'  => $user_photo,
                                     ':reg_in'      => date("M n, Y") . ' at ' . date("h:i A"),
                                     ':user_role'   => $user_role,
                                 ]);
@@ -88,7 +86,7 @@
                     ?>
 
                     <!--Start Table-->
-                    <!-- <div class="container-fluid mt-n10"> -->
+                    <div class="container-fluid mt-n10">
                         <div class="card mb-4">
                             <div class="card-header">Create New User</div>
                             <div class="card-body">
@@ -140,7 +138,7 @@
                                 </form>
                             </div>
                         </div>
-                    <!-- </div> -->
+                    </div>
                     <!--End Table-->
                 </main>
 
