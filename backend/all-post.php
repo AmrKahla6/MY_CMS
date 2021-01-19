@@ -74,7 +74,6 @@
                                                     ]);
                                                     $dir="./../img/";
                                                     $fdir= $dir.$post_photo;
-                                                    echo $fdir;
                                                     unlink($fdir);
                                                     header("Location: all-post.php");
                                                 }
@@ -125,7 +124,10 @@
                                                         </td>
                                                         <td><?php echo $post_views; ?></td>
                                                         <td>
-                                                            <button class="btn btn-blue btn-icon"><i data-feather="edit"></i></button>
+                                                            <form action="edit-post.php" method="POST">
+                                                                <input type="hidden" value="<?php echo $post_id; ?>" name="post-id" />
+                                                                <button name="edit-post" type="submit" class="btn btn-blue btn-icon"><i data-feather="edit"></i></button>
+                                                            </form>
                                                         </td>
                                                         <td>
                                                             <form action="all-post.php" method="POST">
