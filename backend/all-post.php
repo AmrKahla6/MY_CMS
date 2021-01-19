@@ -36,7 +36,6 @@
                                     <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
                                         <thead>
                                             <tr>
-                                                <th>#</th>
                                                 <th>ID</th>
                                                 <th>Title</th>
                                                 <th>Status</th>
@@ -52,24 +51,47 @@
                                                 <th>Delete</th>
                                             </tr>
                                         </thead>
-                                  
+                                     
                                         <tbody>
+                                            <?php 
+                                                if(isset($_POST['delete-post'])) {
+                                                    $post_id = $_POST['post-id'];
+
+                                                    //select photo from post table
+                                                    $sql1  = "SELECT post_image FROM posts WHERE post_id = :id";
+                                                    $stmt1 = $pdo->prepare($sql1);
+                                                    $stmt1->execute([
+                                                        ':id' => $post_id
+                                                    ]);
+                                                    $photo       = $stmt1->fetch(PDO::FETCH_ASSOC);
+                                                    $post_photo  = $photo['post_image'];
+                                                    
+                                                    // DELETE POST With Pic
+                                                    $sql = "DELETE FROM posts WHERE post_id = :id";
+                                                    $stmt = $pdo->prepare($sql);
+                                                    $stmt->execute([
+                                                        ':id' => $post_id
+                                                    ]);
+                                                    $dir="./../img/";
+                                                    $fdir= $dir.$post_photo;
+                                                    echo $fdir;
+                                                    unlink($fdir);
+                                                    header("Location: all-post.php");
+                                                }
+                                            ?>
+
                                             <?php 
                                                 $sql = "SELECT * FROM posts ORDER BY post_id DESC";
                                                 $stmt = $pdo->prepare($sql);
                                                 $stmt->execute();
-                                                $x = 1;
                                                 while($posts = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                                                    // post_id, post_category_id, post_title, post_details, 
-                                                    // post_image, post_date, post_status, post_author, post_views, 
-                                                    // post_comment_count, post_tags
                                                     $post_id = $posts['post_id'];
                                                     $post_category_id = $posts['post_category_id'];
                                                     // category_name from categories table
                                                     $sql1  = "SELECT * FROM categories WHERE category_id = :id";
                                                     $stmt1 = $pdo->prepare($sql1);
                                                     $stmt1->execute([':id'=>$post_category_id]);
-                                                    $cat  = $stmt1->fetch(PDO::FETCH_ASSOC);
+                                                    $cat = $stmt1->fetch(PDO::FETCH_ASSOC);
                                                     $category_title = $cat['category_name'];
 
                                                     $post_title   = $posts['post_title'];
@@ -79,17 +101,16 @@
                                                     $post_status  = $posts['post_status'];
                                                     $post_author  = $posts['post_author'];
                                                     $post_views   = $posts['post_views'];
-                                                    $post_comment_count = $posts['post_comment_count'];
 
-                                                    $post_tags = substr($posts['post_tags'], 0, 10); ?>
+                                                    $post_comment_count = $posts['post_comment_count'];
+                                                    $post_tags  = substr($posts['post_tags'], 0, 10); ?>
                                                     <tr>
-                                                        <td><?php echo $x++; ?></td>
                                                         <td><?php echo $post_id; ?></td>
                                                         <td>
                                                             <a href="../single.php?post_id=<?php echo $post_id ?>" target="_blank"><?php echo $post_title; ?></a>
                                                         </td>
                                                         <td>
-                                                            <div class="badge badge-<?php echo $post_status=='Published'?'success':'warning'; ?>"><?php echo $post_status; ?></div>
+                                                            <div class="badge badge-<?php echo $post_status=='published'?'success':'warning'; ?>"><?php echo $post_status; ?></div>
                                                         </td>
                                                         <td><?php echo $category_title; ?></td>
                                                         <td><?php echo $post_author; ?></td>
@@ -107,7 +128,10 @@
                                                             <button class="btn btn-blue btn-icon"><i data-feather="edit"></i></button>
                                                         </td>
                                                         <td>
-                                                            <button class="btn btn-red btn-icon"><i data-feather="trash-2"></i></button>
+                                                            <form action="all-post.php" method="POST">
+                                                                <input type="hidden" name="post-id" value="<?php echo $post_id; ?>" />
+                                                                <button name="delete-post" type="submit" class="btn btn-red btn-icon"><i data-feather="trash-2"></i></button>
+                                                            </form>
                                                         </td>
                                                     </tr>
                                                <?php }
